@@ -35,6 +35,37 @@ def print_commands() -> None:
     write_line(f"{colored('finish', 'green')}: to finish your exam.")
 
 
+def print_practice_commands() -> None:
+    write_line("Available commands:")
+    write_line(
+        f"{colored('grademe', 'green')}: to evaluate your current exercise."
+    )
+    write_line(
+        f"{colored('clear', 'green')}: clear the samushell terminal."
+    )
+    write_line(f"{colored('finish', 'green')}: to finish your exam.")
+
+
+def practice_exercise(exercise: int) -> None:
+    prepare_exam_directories()
+    copy_subject(exercise)
+    clear_screen()
+    name = EXERCISE_NAMES[exercise]
+    print(f"Actual exercise: {colored(name, 'green')}")
+    print(f"Subject aviable in subject/{name}.txt")
+    print_practice_commands()
+    command = safe_input(PROMPT)
+    while command != "finish":
+        if command == "grademe":
+            pass
+        elif command == "clear":
+            clear_screen()
+        else:
+            print("Unreconiced command. Type 'grademe' or 'finish'.")
+
+        command = safe_input(PROMPT)
+
+
 def start_exam(exercises: list[int]) -> None:
     clear_screen()
     write_line("Enter your login: ", end="")

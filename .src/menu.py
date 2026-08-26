@@ -1,5 +1,5 @@
 from constants import EXERCISE_NAMES, PROMPT
-from exam import start_exam
+from exam import practice_exercise, start_exam
 from signals import safe_input
 from terminal import clear_screen, write_line
 
@@ -14,6 +14,8 @@ def show_all_exercises(exercises: list[int]) -> None:
         choice = safe_input(PROMPT)
         if choice == "q":
             return
+        if choice.isdigit() and 1 <= int(choice) <= len(EXERCISE_NAMES):
+            practice_exercise(int(choice) - 1)
 
 
 def show_main_menu(exercises: list[int]) -> None:

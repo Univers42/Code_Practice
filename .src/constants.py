@@ -28,8 +28,3 @@ EXERCISE_NAMES = [
     "tallest_sunflowers",
     "workshop_setup_order",
 ]
-
-EXERCISE_FILES = {
-    number: f"{name}.txt"
-    for number, name in enumerate(EXERCISE_NAMES, start=1)
-}

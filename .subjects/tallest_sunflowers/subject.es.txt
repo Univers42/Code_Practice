@@ -4,15 +4,15 @@ Archivos a entregar: tallest_sunflowers.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: No especificado
 
-Escribe una funcion que calcule el maximo de una ventana deslizante sobre una lista de enteros.
+Escribe una función que calcule el máximo de una ventana deslizante sobre una lista de enteros.
 
-Dada una lista de enteros heights y un tamano de ventana k, la funcion debe devolver una lista con el valor maximo de cada posicion de la ventana, a medida que esta se desliza de izquierda a derecha con paso 1.
+Dada una lista de enteros heights y un tamaño de ventana k, la función debe devolver una lista con el valor máximo de cada posición de la ventana, a medida que esta se desliza de izquierda a derecha con paso 1.
 
 Reglas:
-- Debe devolverse una lista con un valor maximo por cada posicion de la ventana.
-- Debe devolverse una lista vacia si heights esta vacia, si k <= 0, o si k es mayor que la longitud de heights.
+- Debe devolverse una lista con un valor máximo por cada posición de la ventana.
+- Debe devolverse una lista vacía si heights está vacía, si k <= 0, o si k es mayor que la longitud de heights.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def tallest_sunflowers(heights: list[int], k: int) -> list[int]:
 

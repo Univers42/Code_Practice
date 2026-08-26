@@ -4,18 +4,18 @@ Archivos a entregar: firefly_grid.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: No especificado
 
-Escribe una funcion que dibuje una cuadricula 2D a partir de una lista de coordenadas.
+Escribe una función que dibuje una cuadrícula 2D a partir de una lista de coordenadas.
 
-Dada una lista de coordenadas fireflies, donde cada elemento es una tupla (fila, columna), y un tamano de cuadricula size, la funcion debe devolver una lista de cadenas que representen una cuadricula cuadrada de tamano size x size.
+Dada una lista de coordenadas fireflies, donde cada elemento es una tupla (fila, columna), y un tamaño de cuadrícula size, la función debe devolver una lista de cadenas que representen una cuadrícula cuadrada de tamaño size x size.
 
 Reglas:
-- Las posiciones indicadas en fireflies se representan con el caracter '*'.
-- Las posiciones vacias se representan con el caracter '.'.
+- Las posiciones indicadas en fireflies se representan con el carácter '*'.
+- Las posiciones vacías se representan con el carácter '.'.
 - La coordenada (0, 0) corresponde a la esquina superior izquierda.
-- Las coordenadas fuera de los limites de la cuadricula deben ignorarse.
+- Las coordenadas fuera de los límites de la cuadrícula deben ignorarse.
 - Las coordenadas duplicadas deben tratarse como una sola.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def firefly_grid(fireflies: list[tuple[int, int]], size: int) -> list[str]:
 

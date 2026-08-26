@@ -4,16 +4,16 @@ Archivos a entregar: shared_ingredients.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: No especificado
 
-Escribe una funcion que calcule la interseccion de varias listas de enteros.
+Escribe una función que calcule la intersección de varias listas de enteros.
 
-Dada una lista de listas recipes, la funcion debe devolver, ordenados de forma ascendente, los elementos que aparecen en TODAS las listas contenidas en recipes.
+Dada una lista de listas recipes, la función debe devolver, ordenados de forma ascendente, los elementos que aparecen en TODAS las listas contenidas en recipes.
 
 Reglas:
 - El resultado debe estar ordenado de forma ascendente.
 - El resultado no debe contener elementos duplicados.
-- Si recipes esta vacia, o si alguna de las listas que contiene esta vacia, el resultado es una lista vacia.
+- Si recipes está vacía, o si alguna de las listas que contiene está vacía, el resultado es una lista vacía.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def shared_ingredients(recipes: list[list[int]]) -> list[int]:
 

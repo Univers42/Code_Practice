@@ -1,0 +1,29 @@
+Exercise name: gears_match
+Turn-in directory: rendu/gears_match
+Files to turn in: gears_match.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that checks whether a list of integers is a circular rotation of another.
+
+Given two lists of integers gear_a and gear_b, the function must determine whether gear_b can be obtained by rotating gear_a circularly, left or right, by any number of positions.
+
+Rules:
+- If gear_a and gear_b have different lengths, the result is False.
+- Two empty lists are considered valid rotations of each other (True).
+- A rotation of 0 positions (identical lists) is valid.
+- Both left and right rotations must be considered.
+
+The function must be declared as:
+
+def gears_match(gear_a: list[int], gear_b: list[int]) -> bool:
+
+Expected output examples:
+Input: gears_match([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) -> True
+Input: gears_match([1, 2, 3, 4, 5], [4, 5, 1, 2, 3]) -> True
+Input: gears_match([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]) -> True
+Input: gears_match([1, 2, 3, 4, 5], [2, 3, 4, 5, 1]) -> True
+Input: gears_match([1, 2, 3], [1, 3, 2]) -> False
+Input: gears_match([1, 2, 3], [1, 2]) -> False
+Input: gears_match([], []) -> True
+Input: gears_match([1, 1, 1], [1, 1, 1]) -> True

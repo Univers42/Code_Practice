@@ -4,18 +4,18 @@ Archivos a entregar: merge_milk_routes.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: sort(), sorted(), heapq.merge()
 
-Escribe una funcion que combine varias listas ya ordenadas en una unica lista ordenada.
+Escribe una función que combine varias listas ya ordenadas en una única lista ordenada.
 
-Dada una lista de listas routes, donde cada lista interna ya esta ordenada de forma ascendente, la funcion debe devolver una unica lista con todos los elementos, tambien ordenada de forma ascendente.
+Dada una lista de listas routes, donde cada lista interna ya está ordenada de forma ascendente, la función debe devolver una única lista con todos los elementos, también ordenada de forma ascendente.
 
 Reglas:
 - Los duplicados deben conservarse en el resultado.
-- Todas las listas de entrada estan garantizadas como ya ordenadas de forma ascendente.
-- Debe manejar correctamente numeros negativos.
-- Debe manejar correctamente listas internas vacias y una entrada routes vacia.
-- No se permite usar sort(), sorted() ni heapq.merge() en la solucion: el objetivo es combinar las listas ya ordenadas, no volver a ordenarlas.
+- Todas las listas de entrada están garantizadas como ya ordenadas de forma ascendente.
+- Debe manejar correctamente números negativos.
+- Debe manejar correctamente listas internas vacías y una entrada routes vacía.
+- No se permite usar sort(), sorted() ni heapq.merge() en la solución: el objetivo es combinar las listas ya ordenadas, no volver a ordenarlas.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def merge_milk_routes(routes: list[list[int]]) -> list[int]:
 

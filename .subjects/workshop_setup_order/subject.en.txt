@@ -1,0 +1,26 @@
+Exercise name: workshop_setup_order
+Turn-in directory: rendu/workshop_setup_order
+Files to turn in: workshop_setup_order.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that calculates a valid topological order from a dependency graph.
+
+Given a dictionary tools, where each key is the name of a tool and its value is the list of tools it depends on, the function must return a list with a valid assembly order, in which every tool appears after all the tools it depends on.
+
+Rules:
+- If there is a circular dependency and no valid order is possible, an empty list must be returned.
+- References to tools that do not exist as a key in the dictionary must be ignored.
+- A tool that depends on itself can never be assembled.
+- When several tools can be assembled at the same time, they must be sorted alphabetically among themselves.
+
+The function must be declared as:
+
+def workshop_setup_order(tools: dict[str, list[str]]) -> list[str]:
+
+Expected output examples:
+Input: workshop_setup_order({"app": ["database"], "database": ["driver"], "driver": []}) -> ['driver', 'database', 'app']
+Input: workshop_setup_order({"A": [], "B": ["A"], "C": ["A", "B"]}) -> ['A', 'B', 'C']
+Input: workshop_setup_order({}) -> []
+Input: workshop_setup_order({"X": ["Y"], "Y": ["X"]}) -> []
+Input: workshop_setup_order({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]}) -> ['api', 'web', 'backend', 'frontend']

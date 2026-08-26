@@ -21,7 +21,7 @@ def show_all_exercises(exercises: list[int]) -> None:
 def show_main_menu(exercises: list[int]) -> None:
     while True:
         clear_screen()
-        write_line("Welcome to samushell")
+        write_line("Welcome to samushell", 2)
         write_line("[1] Start exam")
         write_line("[2] Show all exercises")
         write_line("[3] Exit")

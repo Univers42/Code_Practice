@@ -1,0 +1,28 @@
+Exercise name: firefly_grid
+Turn-in directory: rendu/firefly_grid
+Files to turn in: firefly_grid.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that draws a 2D grid from a list of coordinates.
+
+Given a list of coordinates fireflies, where each element is a tuple (row, column), and a grid size size, the function must return a list of strings representing a square grid of size size x size.
+
+Rules:
+- The positions listed in fireflies are represented with the character '*'.
+- Empty positions are represented with the character '.'.
+- The coordinate (0, 0) corresponds to the top-left corner.
+- Coordinates outside the grid's bounds must be ignored.
+- Duplicate coordinates must be treated as a single one.
+
+The function must be declared as:
+
+def firefly_grid(fireflies: list[tuple[int, int]], size: int) -> list[str]:
+
+Expected output examples:
+Input: firefly_grid([(0, 0), (1, 1), (2, 2)], 3) -> ['*..', '.*.', '..*']
+Input: firefly_grid([(1, 1), (0, 1), (2, 1), (1, 0), (1, 2)], 3) -> ['.*.', '***', '.*.']
+Input: firefly_grid([], 2) -> ['..', '..']
+Input: firefly_grid([(0, 0), (0, 0), (1, 1)], 2) -> ['*.', '.*']
+Input: firefly_grid([(0, 0), (5, 5)], 3) -> ['*..', '...', '...']
+Input: firefly_grid([(1, 0), (1, 1), (1, 2)], 3) -> ['...', '***', '...']

@@ -4,17 +4,17 @@ Archivos a entregar: gears_match.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: No especificado
 
-Escribe una funcion que compruebe si una lista de enteros es una rotacion circular de otra.
+Escribe una función que compruebe si una lista de enteros es una rotación circular de otra.
 
-Dadas dos listas de enteros gear_a y gear_b, la funcion debe determinar si gear_b puede obtenerse rotando gear_a circularmente, hacia la izquierda o hacia la derecha, cualquier numero de posiciones.
+Dadas dos listas de enteros gear_a y gear_b, la función debe determinar si gear_b puede obtenerse rotando gear_a circularmente, hacia la izquierda o hacia la derecha, cualquier número de posiciones.
 
 Reglas:
 - Si gear_a y gear_b tienen longitudes distintas, el resultado es False.
-- Dos listas vacias se consideran rotaciones validas entre si (True).
-- Una rotacion de 0 posiciones (listas identicas) es valida.
+- Dos listas vacías se consideran rotaciones válidas entre sí (True).
+- Una rotación de 0 posiciones (listas idénticas) es válida.
 - Deben considerarse tanto rotaciones a la izquierda como a la derecha.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def gears_match(gear_a: list[int], gear_b: list[int]) -> bool:
 

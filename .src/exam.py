@@ -8,6 +8,18 @@ from signals import safe_input
 from terminal import clear_screen, write_line
 
 
+def subject_files_message(name: str) -> str:
+    return f"Subject available in subject/{name}/"
+
+
+def confirm(question: str) -> bool:
+    prompt = f"{colored(question, 'red')} (y/n): "
+    while True:
+        answer = safe_input(prompt).strip().lower()
+        if answer in ("y", "n"):
+            return answer == "y"
+
+
 def print_status(
     level: int, score: int, exercise: int, exam_deadline: float
 ) -> None:
@@ -15,9 +27,9 @@ def print_status(
     remaining = format_remaining_time(get_remaining_time(exam_deadline))
     print(f"Actual exercise: {colored(f'{level}/4', 'green')} {name}. ",
           end="")
-    print(f"Subject aviable in subject/{name}.txt")
+    print(subject_files_message(name))
     print(f"Actual score: {colored(f'{score}/100', 'green')}")
-    print(colored("25 point aviables in current exercise.", "green"))
+    print(colored("25 points available in current exercise.", "green"))
     print(colored(remaining, "green"))
 
 
@@ -47,12 +59,11 @@ def print_practice_commands() -> None:
 
 
 def practice_exercise(exercise: int) -> None:
-    prepare_exam_directories()
     copy_subject(exercise)
     clear_screen()
     name = EXERCISE_NAMES[exercise]
     print(f"Actual exercise: {colored(name, 'green')}")
-    print(f"Subject aviable in subject/{name}.txt")
+    print(subject_files_message(name))
     print_practice_commands()
     command = safe_input(PROMPT)
     while command != "finish":
@@ -61,7 +72,7 @@ def practice_exercise(exercise: int) -> None:
         elif command == "clear":
             clear_screen()
         else:
-            print("Unreconiced command. Type 'grademe' or 'finish'.")
+            print("Unrecognized command. Type 'grademe' or 'finish'.")
 
         command = safe_input(PROMPT)
 
@@ -73,11 +84,11 @@ def start_exam(exercises: list[int]) -> None:
     write_line(f"Loading the current exam from the student {login}...",
                wait=1)
 
-    write_line(f"You have {colored('1', 'green')} exam aviable.", wait=2)
-    write_line("You are entring in the real exam mode.")
+    write_line(f"You have {colored('1', 'green')} exam available.", wait=2)
+    write_line("You are entering in the real exam mode.")
     write_line(
-        f"You have {colored('3 hours', 'green')} remainig "
-        "for finish yours exercices."
+        f"You have {colored('3 hours', 'green')} remaining "
+        "to finish your exercises."
     )
     print_commands()
     write_line(colored("Press [ENTER] to start:", "gray"), end="")
@@ -91,17 +102,44 @@ def start_exam(exercises: list[int]) -> None:
     copy_subject(exercise)
     print_status(level, score, exercise, exam_deadline)
     command = safe_input(PROMPT)
-    while command != "finish":
+    while command != "finish" or level > 4:
+        if get_remaining_time(exam_deadline) <= 0:
+            print(colored("Time's up! Your exam has ended.", "red"))
+            print(f"Final score: {colored(f'{score}/100', 'green')}")
+            break
         if command == "status":
             print_status(level, score, exercise, exam_deadline)
             print_commands()
         elif command == "grademe":
-            pass
+            if confirm("Are you completely sure?"):
+                print(
+                    colored(">>>>>PASSED<<<<<", "green")
+                )
+                write_line(
+                    colored("Press [ENTER] to continue:", "gray"), end=""
+                )
+                while safe_input() != "":
+                    continue
+                level += 1
+                score += 25
+                if level <= 4:
+                    exercise = pick_random_exercise(exercises)
+                    copy_subject(exercise)
+                    print_status(level, score, exercise, exam_deadline)
         elif command == "finish":
             break
         elif command == "clear":
             clear_screen()
         else:
-            print("Unreconiced command. Type 'status' for more information.")
+            print("Unrecognized command. Type 'status' for more information.")
 
         command = safe_input(PROMPT)
+    if level > 4:
+        level = 4
+    write_line(
+        f"You reach at excersice {colored(f"{level}/4", 'green')}", 2
+    )
+    if score == 100:
+        write_line(
+                colored("You reach max score!", "green"), 2
+            )

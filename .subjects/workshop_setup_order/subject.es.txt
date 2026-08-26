@@ -4,17 +4,17 @@ Archivos a entregar: workshop_setup_order.py
 Funciones autorizadas: No especificado
 Funciones prohibidas: No especificado
 
-Escribe una funcion que calcule un orden topologico valido a partir de un grafo de dependencias.
+Escribe una función que calcule un orden topológico válido a partir de un grafo de dependencias.
 
-Dado un diccionario tools, donde cada clave es el nombre de una herramienta y su valor es la lista de herramientas de las que depende, la funcion debe devolver una lista con un orden de montaje valido, en el que cada herramienta aparezca despues de todas las herramientas de las que depende.
+Dado un diccionario tools, donde cada clave es el nombre de una herramienta y su valor es la lista de herramientas de las que depende, la función debe devolver una lista con un orden de montaje válido, en el que cada herramienta aparezca después de todas las herramientas de las que depende.
 
 Reglas:
-- Si existe una dependencia circular y no hay ningun orden valido posible, se debe devolver una lista vacia.
+- Si existe una dependencia circular y no hay ningún orden válido posible, se debe devolver una lista vacía.
 - Las referencias a herramientas que no existan como clave en el diccionario deben ignorarse.
-- Una herramienta que depende de si misma nunca puede montarse.
-- Cuando varias herramientas puedan montarse en el mismo momento, deben ordenarse alfabeticamente entre si.
+- Una herramienta que depende de sí misma nunca puede montarse.
+- Cuando varias herramientas puedan montarse en el mismo momento, deben ordenarse alfabéticamente entre sí.
 
-La funcion debera ser declarada como:
+La función deberá ser declarada como:
 
 def workshop_setup_order(tools: dict[str, list[str]]) -> list[str]:
 

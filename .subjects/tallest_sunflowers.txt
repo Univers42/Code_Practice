@@ -1,0 +1,26 @@
+Nombre del ejercicio: tallest_sunflowers
+Directorio de entrega: rendu/tallest_sunflowers
+Archivos a entregar: tallest_sunflowers.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una funcion que calcule el maximo de una ventana deslizante sobre una lista de enteros.
+
+Dada una lista de enteros heights y un tamano de ventana k, la funcion debe devolver una lista con el valor maximo de cada posicion de la ventana, a medida que esta se desliza de izquierda a derecha con paso 1.
+
+Reglas:
+- Debe devolverse una lista con un valor maximo por cada posicion de la ventana.
+- Debe devolverse una lista vacia si heights esta vacia, si k <= 0, o si k es mayor que la longitud de heights.
+
+La funcion debera ser declarada como:
+
+def tallest_sunflowers(heights: list[int], k: int) -> list[int]:
+
+Ejemplos de salida esperados:
+Input: tallest_sunflowers([1, 3, -1, -3, 5, 3, 6, 7], 3) -> [3, 3, 5, 5, 6, 7]
+Input: tallest_sunflowers([1, 2, 3, 4, 5], 2) -> [2, 3, 4, 5]
+Input: tallest_sunflowers([5, 4, 3, 2, 1], 1) -> [5, 4, 3, 2, 1]
+Input: tallest_sunflowers([1, 2, 3], 3) -> [3]
+Input: tallest_sunflowers([1, 2, 3], 4) -> []
+Input: tallest_sunflowers([], 2) -> []
+Input: tallest_sunflowers([1, 2, 3], 0) -> []

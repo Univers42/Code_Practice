@@ -1,0 +1,28 @@
+Nombre del ejercicio: firefly_grid
+Directorio de entrega: rendu/firefly_grid
+Archivos a entregar: firefly_grid.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una funcion que dibuje una cuadricula 2D a partir de una lista de coordenadas.
+
+Dada una lista de coordenadas fireflies, donde cada elemento es una tupla (fila, columna), y un tamano de cuadricula size, la funcion debe devolver una lista de cadenas que representen una cuadricula cuadrada de tamano size x size.
+
+Reglas:
+- Las posiciones indicadas en fireflies se representan con el caracter '*'.
+- Las posiciones vacias se representan con el caracter '.'.
+- La coordenada (0, 0) corresponde a la esquina superior izquierda.
+- Las coordenadas fuera de los limites de la cuadricula deben ignorarse.
+- Las coordenadas duplicadas deben tratarse como una sola.
+
+La funcion debera ser declarada como:
+
+def firefly_grid(fireflies: list[tuple[int, int]], size: int) -> list[str]:
+
+Ejemplos de salida esperados:
+Input: firefly_grid([(0, 0), (1, 1), (2, 2)], 3) -> ['*..', '.*.', '..*']
+Input: firefly_grid([(1, 1), (0, 1), (2, 1), (1, 0), (1, 2)], 3) -> ['.*.', '***', '.*.']
+Input: firefly_grid([], 2) -> ['..', '..']
+Input: firefly_grid([(0, 0), (0, 0), (1, 1)], 2) -> ['*.', '.*']
+Input: firefly_grid([(0, 0), (5, 5)], 3) -> ['*..', '...', '...']
+Input: firefly_grid([(1, 0), (1, 1), (1, 2)], 3) -> ['...', '***', '...']

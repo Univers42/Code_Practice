@@ -1,0 +1,27 @@
+Nombre del ejercicio: shared_ingredients
+Directorio de entrega: rendu/shared_ingredients
+Archivos a entregar: shared_ingredients.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una funcion que calcule la interseccion de varias listas de enteros.
+
+Dada una lista de listas recipes, la funcion debe devolver, ordenados de forma ascendente, los elementos que aparecen en TODAS las listas contenidas en recipes.
+
+Reglas:
+- El resultado debe estar ordenado de forma ascendente.
+- El resultado no debe contener elementos duplicados.
+- Si recipes esta vacia, o si alguna de las listas que contiene esta vacia, el resultado es una lista vacia.
+
+La funcion debera ser declarada como:
+
+def shared_ingredients(recipes: list[list[int]]) -> list[int]:
+
+Ejemplos de salida esperados:
+Input: shared_ingredients([[1, 2, 3], [2, 3, 4], [2, 3, 5]]) -> [2, 3]
+Input: shared_ingredients([[1, 2, 3, 4], [2, 4, 6, 8], [4, 8, 12]]) -> [4]
+Input: shared_ingredients([[1, 2, 3], [4, 5, 6]]) -> []
+Input: shared_ingredients([[1, 1, 2, 3], [1, 2, 2, 3], [1, 2, 3, 3]]) -> [1, 2, 3]
+Input: shared_ingredients([]) -> []
+Input: shared_ingredients([[1, 2, 3], []]) -> []
+Input: shared_ingredients([[5]]) -> [5]

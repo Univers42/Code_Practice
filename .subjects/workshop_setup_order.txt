@@ -1,0 +1,26 @@
+Nombre del ejercicio: workshop_setup_order
+Directorio de entrega: rendu/workshop_setup_order
+Archivos a entregar: workshop_setup_order.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una funcion que calcule un orden topologico valido a partir de un grafo de dependencias.
+
+Dado un diccionario tools, donde cada clave es el nombre de una herramienta y su valor es la lista de herramientas de las que depende, la funcion debe devolver una lista con un orden de montaje valido, en el que cada herramienta aparezca despues de todas las herramientas de las que depende.
+
+Reglas:
+- Si existe una dependencia circular y no hay ningun orden valido posible, se debe devolver una lista vacia.
+- Las referencias a herramientas que no existan como clave en el diccionario deben ignorarse.
+- Una herramienta que depende de si misma nunca puede montarse.
+- Cuando varias herramientas puedan montarse en el mismo momento, deben ordenarse alfabeticamente entre si.
+
+La funcion debera ser declarada como:
+
+def workshop_setup_order(tools: dict[str, list[str]]) -> list[str]:
+
+Ejemplos de salida esperados:
+Input: workshop_setup_order({"app": ["database"], "database": ["driver"], "driver": []}) -> ['driver', 'database', 'app']
+Input: workshop_setup_order({"A": [], "B": ["A"], "C": ["A", "B"]}) -> ['A', 'B', 'C']
+Input: workshop_setup_order({}) -> []
+Input: workshop_setup_order({"X": ["Y"], "Y": ["X"]}) -> []
+Input: workshop_setup_order({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]}) -> ['api', 'web', 'backend', 'frontend']

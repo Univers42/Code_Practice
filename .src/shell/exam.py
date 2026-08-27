@@ -7,6 +7,7 @@ from exercises import pick_random_exercise
 from filesystem import copy_subject, prepare_exam_directories
 from signals import safe_input
 from terminal import clear_screen, write_line
+from testing import choice_test
 
 
 def subject_files_message(name: str) -> str:
@@ -80,7 +81,29 @@ def practice_exercise(config: ExamConfig, exercise: int) -> None:
     command = safe_input(PROMPT)
     while command != "finish":
         if command == "grademe":
-            pass
+            result = choice_test(config)
+            if result[-1]:
+                print(
+                        colored(">>>>>PASSED<<<<<", "green")
+                    )
+                write_line(
+                    colored("Press [ENTER] to go back:\n", "gray"), end=""
+                    )
+                while safe_input() != "":
+                    continue
+                break
+            else:
+                print(
+                        colored(">>>>>FAILURE<<<<<", "red")
+                    )
+                write_line(
+                    colored("Press [ENTER] to retry:\n", "gray"), end=""
+                    )
+                while safe_input() != "":
+                    continue
+                config.retrys += 1
+                command = safe_input(PROMPT)
+                continue
         elif command == "clear":
             clear_screen()
         else:
@@ -125,22 +148,37 @@ def start_exam(config: ExamConfig) -> None:
             print_commands()
         elif command == "grademe":
             if confirm("Are you completely sure?"):
-                print(
-                    colored(">>>>>PASSED<<<<<", "green")
-                )
-                write_line(
-                    colored("Press [ENTER] to continue:\n", "gray"), end=""
-                )
-                while safe_input() != "":
+                config.level = level
+                result = choice_test(config)
+                if result[-1]:
+                    print(
+                        colored(">>>>>PASSED<<<<<", "green")
+                    )
+                    write_line(
+                        colored("Press [ENTER] to continue:\n", "gray"), end=""
+                    )
+                    while safe_input() != "":
+                        continue
+                    level += 1
+                    config.retrys = 0
+                    score = config.score_after(level)
+                    if level > config.last_level:
+                        break
+                    exercise = pick_random_exercise(exercises)
+                    copy_subject(config, exercise)
+                    print_status(config, level, score, exercise, exam_deadline)
+                else:
+                    print(
+                            colored(">>>>>FAILURE<<<<<", "red")
+                        )
+                    write_line(
+                        colored("Press [ENTER] to retry:\n", "gray"), end=""
+                        )
+                    while safe_input() != "":
+                        continue
+                    config.retrys += 1
+                    command = safe_input(PROMPT)
                     continue
-                level += 1
-                config.retrys = 0
-                score = config.score_after(level)
-                if level > config.last_level:
-                    break
-                exercise = pick_random_exercise(exercises)
-                copy_subject(config, exercise)
-                print_status(config, level, score, exercise, exam_deadline)
         elif command == "finish":
             break
         elif command == "clear":

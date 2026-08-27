@@ -18,6 +18,7 @@ class ExamConfig:
     subjects_dir: str
     current_exercise: str = ""
     retrys: int = 0
+    level: int = 0
 
     def exercise_pool(self) -> list[int]:
         return list(range(len(self.exercise_names)))

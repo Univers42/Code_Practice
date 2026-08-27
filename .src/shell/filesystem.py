@@ -29,3 +29,9 @@ def cleanup_subject_dir() -> None:
     subject_dir = Path("subject")
     if subject_dir.exists():
         shutil.rmtree(subject_dir)
+
+
+def cleanup_traces_dir() -> None:
+    traces_dir = Path("traces")
+    if traces_dir.exists():
+        shutil.rmtree(traces_dir)

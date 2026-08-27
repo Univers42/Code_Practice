@@ -18,6 +18,7 @@ def prepare_exam_directories() -> None:
 
 def copy_subject(config: ExamConfig, exercise: int) -> None:
     name = config.exercise_names[exercise]
+    config.current_exercise = name
     destination = Path("subject") / name
     if destination.exists():
         shutil.rmtree(destination)

@@ -10,7 +10,7 @@ from terminal import clear_screen, write_line
 
 
 def subject_files_message(name: str) -> str:
-    return f"Subject available in subject/{name}/"
+    return f"\nSubject available in subject/{name}/"
 
 
 def confirm(question: str) -> bool:
@@ -104,7 +104,7 @@ def start_exam(config: ExamConfig) -> None:
         "to finish your exercises."
     )
     print_commands()
-    write_line(colored("Press [ENTER] to start:", "gray"), end="")
+    write_line(colored("Press [ENTER] to start:\n", "gray"), end="")
     while safe_input() != "":
         continue
     prepare_exam_directories()
@@ -129,11 +129,12 @@ def start_exam(config: ExamConfig) -> None:
                     colored(">>>>>PASSED<<<<<", "green")
                 )
                 write_line(
-                    colored("Press [ENTER] to continue:", "gray"), end=""
+                    colored("Press [ENTER] to continue:\n", "gray"), end=""
                 )
                 while safe_input() != "":
                     continue
                 level += 1
+                config.retrys = 0
                 score = config.score_after(level)
                 if level > config.last_level:
                     break

@@ -1,4 +1,4 @@
-from constants import PROMPT
+from constants import PROMPT, colored
 from exam import practice_exercise, start_exam
 from exam_config import ExamConfig, get_exam_config
 from signals import safe_input
@@ -10,7 +10,7 @@ def show_all_exercises(config: ExamConfig) -> None:
         clear_screen()
         write_line(f"All exercises (Rank {config.rank:02d}):")
         for number, name in enumerate(config.exercise_names, start=1):
-            write_line(f"[{number}] {name}")
+            write_line(f"{colored(f'[{number}]', 'green')} {name}")
         write_line("[q] Back")
         choice = safe_input(PROMPT)
         if choice == "q":
@@ -40,14 +40,14 @@ def show_main_menu() -> None:
     while True:
         clear_screen()
         write_line("Welcome to samushell", 2)
-        write_line("[1] Rank 03")
-        write_line("[2] Rank 04")
-        write_line("[3] Exit")
+        write_line("[3] Rank 03")
+        write_line("[4] Rank 04")
+        write_line("[q] Exit")
         choice = safe_input(PROMPT)
-        if choice == "1":
+        if choice == "3":
             show_exam_menu(get_exam_config(3))
-        elif choice == "2":
+        elif choice == "4":
             show_exam_menu(get_exam_config(4))
-        elif choice == "3":
+        elif choice == "q":
             clear_screen()
             exit(0)

@@ -13,6 +13,6 @@ def safe_input(prompt: str = "") -> str:
     while True:
         try:
             return input(prompt)
-        except ExamInterrupt:
+        except (ExamInterrupt, EOFError):
             print()
             write_line("Use finish to end the exam.")

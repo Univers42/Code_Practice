@@ -5,12 +5,19 @@ from constants import EXERCISES_3, EXERCISES_4
 
 @dataclass
 class ExamConfig:
-    """Stores which exam the user picked so the program can route to it."""
+    """Stores which exam the user picked so the program can route to it.
+
+    It also carries the mutable state of the running exam: the name of the
+    exercise currently being worked on and how many times it has been
+    retried.
+    """
 
     rank: int
     exercise_names: list[str]
     levels: int
     subjects_dir: str
+    current_exercise: str = ""
+    retrys: int = 0
 
     def exercise_pool(self) -> list[int]:
         return list(range(len(self.exercise_names)))
@@ -33,11 +40,13 @@ class ExamConfig:
         return self.levels - 1
 
 
-RANK_CONFIGS = {
-    3: ExamConfig(3, EXERCISES_3, 6, ".subjects/rank03"),
-    4: ExamConfig(4, EXERCISES_4, 4, ".subjects/rank04"),
+_RANK_DATA = {
+    3: (EXERCISES_3, 6, ".subjects/rank03"),
+    4: (EXERCISES_4, 4, ".subjects/rank04"),
 }
 
 
 def get_exam_config(rank: int) -> ExamConfig:
-    return RANK_CONFIGS[rank]
+    """Build a fresh config for `rank` so no exam state leaks between runs."""
+    exercise_names, levels, subjects_dir = _RANK_DATA[rank]
+    return ExamConfig(rank, exercise_names, levels, subjects_dir)

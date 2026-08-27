@@ -1,3 +1,12 @@
-# def tallest_sunflowers(heights: list[int], k: int) -> list[int]:
+from typing import Any
 
-TEST_CASES: list = []
+TEST_CASES: list[list[Any]] = [
+    [[7], 1],
+    [[5, 4, 3, 2, 1], 1],
+    [[1, 2, 3, 4, 5], 2],
+    [[1, 3, -1, -3, 5, 3, 6, 7], 3],
+    [[1, 2, 3], 3],
+    [[1, 2, 3], 4],
+    [[1, 2, 3], 0],
+    [[], 2]
+]

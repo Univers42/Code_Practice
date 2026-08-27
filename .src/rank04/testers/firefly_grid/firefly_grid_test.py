@@ -1,3 +1,13 @@
-# def firefly_grid(fireflies: list[tuple[int, int]], size: int) -> list[str]:
+from typing import Any
 
-TEST_CASES: list = []
+TEST_CASES: list[list[Any]] = [
+    [[(0, 0), (1, 1), (2, 2)], 3],
+    [[(1, 1), (0, 1), (2, 1), (1, 0), (1, 2)], 3],
+    [[(1, 0), (1, 1), (1, 2)], 3],
+    [[(0, 0)], 1],
+    [[], 2],
+    [[(0, 0), (0, 0), (1, 1)], 2],
+    [[(0, 0), (5, 5)], 3],
+    [[(-1, 0), (0, -1)], 3],
+    [[], 0]
+]

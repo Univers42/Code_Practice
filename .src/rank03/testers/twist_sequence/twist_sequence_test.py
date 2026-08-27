@@ -1,3 +1,13 @@
-# def twist_sequence(arr: list[int], k: int) -> list[int]:
+from typing import Any
 
-TEST_CASES: list = []
+TEST_CASES: list[list[Any]] = [
+    [[1, 2, 3, 4, 5], 0],
+    [[1, 2, 3, 4, 5], 2],
+    [[1, 2], 1],
+    [[7], 3],
+    [[1, 2, 3, 4, 5], 5],
+    [[1, 2, 3, 4, 5], 7],
+    [[1, 2, 3, 4, 5], -2],
+    [[], 0],
+    [[], 3]
+]

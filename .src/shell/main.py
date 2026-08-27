@@ -1,17 +1,18 @@
 import atexit
 import signal
 
-from filesystem import (
-    cleanup_subject_dir,
-    cleanup_traces_dir,
-    prepare_exam_directories,
-)
+from exam_config import validate_rank_data
+from filesystem import cleanup_subject_dir, cleanup_traces_dir
 from menu import show_main_menu
 from signals import handle_sigint
 
 if __name__ == "__main__":
+    problems = validate_rank_data()
+    if problems:
+        for problem in problems:
+            print(problem)
+        raise SystemExit(1)
     signal.signal(signal.SIGINT, handle_sigint)
     atexit.register(cleanup_subject_dir)
     atexit.register(cleanup_traces_dir)
-    prepare_exam_directories()
     show_main_menu()

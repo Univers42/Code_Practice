@@ -1,0 +1,2 @@
+class ExamInterrupt(Exception):
+    pass

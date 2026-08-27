@@ -1,3 +1,11 @@
-# def shadow_merge(list1: list[int], list2: list[int]) -> list[int]:
+from typing import Any
 
-TEST_CASES: list = []
+TEST_CASES: list[list[Any]] = [
+    [[1, 2, 3], []],
+    [[], [4, 5]],
+    [[3, 1, 2], [6, 4, 5]],
+    [[-3, -1, -2], [0, 2]],
+    [[5], [5]],
+    [[1, 1, 1], [1, 1]],
+    [[], []]
+]

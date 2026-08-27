@@ -1,3 +1,11 @@
-# def shared_ingredients(recipes: list[list[int]]) -> list[int]:
+from typing import Any
 
-TEST_CASES: list = []
+TEST_CASES: list[list[Any]] = [
+    [[[5]]],
+    [[[1, 2, 3], [2, 3, 4], [2, 3, 5]]],
+    [[[1, 2, 3, 4], [2, 4, 6, 8], [4, 8, 12]]],
+    [[[1, 1, 2, 3], [1, 2, 2, 3], [1, 2, 3, 3]]],
+    [[[1, 2, 3], [4, 5, 6]]],
+    [[[1, 2, 3], []]],
+    [[]]
+]

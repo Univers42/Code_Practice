@@ -17,4 +17,3 @@ def whisper_cipher_solution(text: str, shift: int) -> str:
         else:
             new_string += char
     return new_string
-

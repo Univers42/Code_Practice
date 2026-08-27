@@ -18,15 +18,15 @@ def _load_module(name: str, path: Path) -> ModuleType:
 
 
 def _write_trace(config: ExamConfig, content: str) -> None:
-    """Persist a failure report to traces/<level>_<retry>_<exercise>.txt."""
     traces_dir = Path("traces")
     traces_dir.mkdir(exist_ok=True)
-    filename = f"{config.level}_{config.retrys}_traces_{config.current_exercise}.txt"
+    filename = (
+        f"{config.level}_{config.retrys}_traces_{config.current_exercise}.txt"
+    )
     (traces_dir / filename).write_text(content)
 
 
 def _fail(config: ExamConfig, message: str) -> list[Any]:
-    """Persist the failure message to traces/ and return the failure result."""
     _write_trace(config, message)
     return [message, False]
 
@@ -45,11 +45,13 @@ def choice_test(config: ExamConfig) -> list[Any]:
     )
     rendu_path = REPO_ROOT / "rendu" / exercise / f"{exercise}.py"
 
-    solution_module = _load_module(f"{exercise}_solution", solution_path)
-    solution_fn = getattr(solution_module, f"{exercise}_solution")
-
-    tester_module = _load_module(f"{exercise}_test", tester_path)
-    test_cases = tester_module.TEST_CASES
+    try:
+        solution_module = _load_module(f"{exercise}_solution", solution_path)
+        solution_fn = getattr(solution_module, f"{exercise}_solution")
+        tester_module = _load_module(f"{exercise}_test", tester_path)
+        test_cases = tester_module.TEST_CASES
+    except (OSError, ImportError, SyntaxError, AttributeError) as error:
+        return _fail(config, f"ERROR: exercise setup is broken: {error}")
 
     try:
         rendu_module = _load_module(exercise, rendu_path)
@@ -57,11 +59,20 @@ def choice_test(config: ExamConfig) -> list[Any]:
     except (OSError, ImportError, SyntaxError) as error:
         return _fail(config, f"ERROR: {error}")
     except AttributeError:
-        return _fail(config, f"ERROR: no function named '{exercise}' in your file")
+        return _fail(
+            config, f"ERROR: no function named '{exercise}' in your file"
+        )
     report: list[Any] = []
     passed = True
     for n, test in enumerate(test_cases, 1):
-        my_result = solution_fn(*test)
+        try:
+            my_result = solution_fn(*test)
+        except Exception as error:
+            return _fail(
+                config,
+                f"ERROR: reference solution is broken on test {n} "
+                f"(input: {test}): {error}",
+            )
         try:
             your_result = rendu_fn(*test)
         except Exception as e:

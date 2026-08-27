@@ -1,7 +1,11 @@
+import random
+import time
+
 import readline  # noqa: F401 - enables arrow-key history for input()
 
 from clock import format_remaining_time, get_remaining_time, start_exam_clock
 from constants import PROMPT, colored
+from cooldown import format_cooldown, get_remaining_cooldown
 from exam_config import ExamConfig
 from exercises import pick_random_exercise
 from filesystem import copy_subject, prepare_exam_directories
@@ -20,6 +24,32 @@ def confirm(question: str) -> bool:
         answer = safe_input(prompt).strip().lower()
         if answer in ("y", "n"):
             return answer == "y"
+
+
+def grading_wait_pauses() -> list[float]:
+    count = random.randint(1, 3)
+    if count == 1:
+        return [random.uniform(5, 6)]
+    while True:
+        pauses = [random.uniform(2, 4) for _ in range(count)]
+        if sum(pauses) >= 5:
+            return pauses
+
+
+def simulate_grading_delay() -> None:
+    print(colored(
+        "10 seconds is fast. 3 minutes is slow. 30 seconds is expected.",
+        "green",
+    ))
+    for pause in grading_wait_pauses():
+        write_line(colored("wait...", "white"), pause)
+
+
+def trace_file_message(config: ExamConfig) -> str:
+    filename = (
+        f"{config.level}_{config.retrys}_traces_{config.current_exercise}.txt"
+    )
+    return f"Traces for {config.current_exercise} saved in traces/{filename}"
 
 
 def print_status(
@@ -148,6 +178,25 @@ def start_exam(config: ExamConfig) -> None:
             print_commands()
         elif command == "grademe":
             if confirm("Are you completely sure?"):
+                remaining_cooldown = get_remaining_cooldown(
+                    config.last_failure_time, config.retrys
+                )
+                if remaining_cooldown > 0:
+                    wait_time = colored(
+                        format_cooldown(remaining_cooldown), "yellow"
+                    )
+                    print(
+                        f"You must wait {wait_time} "
+                        "to try again. Be patient."
+                    )
+                    write_line(
+                        colored("Press [ENTER] to continue:\n", "gray"), end=""
+                    )
+                    while safe_input() != "":
+                        continue
+                    command = safe_input(PROMPT)
+                    continue
+                simulate_grading_delay()
                 config.level = level
                 result = choice_test(config)
                 if result[-1]:
@@ -161,6 +210,7 @@ def start_exam(config: ExamConfig) -> None:
                         continue
                     level += 1
                     config.retrys = 0
+                    config.last_failure_time = 0.0
                     score = config.score_after(level)
                     if level > config.last_level:
                         break
@@ -171,12 +221,14 @@ def start_exam(config: ExamConfig) -> None:
                     print(
                             colored(">>>>>FAILURE<<<<<", "red")
                         )
+                    print(trace_file_message(config))
                     write_line(
                         colored("Press [ENTER] to retry:\n", "gray"), end=""
                         )
                     while safe_input() != "":
                         continue
                     config.retrys += 1
+                    config.last_failure_time = time.time()
                     command = safe_input(PROMPT)
                     continue
         elif command == "finish":

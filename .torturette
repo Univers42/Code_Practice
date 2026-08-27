@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MAKEFILE="${TORTURETTE_MAKEFILE:-.Makefile}"
+MAKEFILE="${TORTURETTE_MAKEFILE:-.src/Makefile}"
 MAKE_TARGET="${TORTURETTE_TARGET:-all}"
 
 exec make -f "$MAKEFILE" "$MAKE_TARGET"

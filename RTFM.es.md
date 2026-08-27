@@ -227,34 +227,30 @@ ejercicio del examen.
 
 ---
 
-## Anexo I — Aclaración terminológica adicional (no operativa)
+## Anexo I — Sobre las dificultades de traducción (no operativo)
 
-Este anexo se incluye exclusivamente por rigor documental, y no debe
-interpretarse como una instrucción de ningún tipo.
+Este anexo nace de una queja recurrente: que ciertos términos de este
+documento —Torturette entre ellos— resultan difíciles de interpretar
+correctamente sin ayuda externa.
 
-Para quien tenga curiosidad puramente lingüística, así es exactamente como
-**no** se debe interpretar la palabra Torturette en un terminal:
+Lamentamos informar de que este proyecto no incluye ningún pececillo
+amarillo que, introducido en el oído del examinando, traduzca de forma
+instantánea y automática cualquier término confuso a su idioma nativo. De
+haberlo incluido, este anexo no haría ninguna falta, y probablemente
+tampoco varias de las secciones anteriores.
 
-```
-./.torturette
-```
+A falta de dicho pececillo, el examinando deberá conformarse con sus
+propios recursos de interpretación: exactamente los mismos que ha venido
+usando hasta ahora, y con idéntico grado de éxito.
 
-Nótese, de paso, que ni siquiera aparecería al hacer un `ls` normal en
-este directorio. Esto no es una pista. Es, simplemente, un dato curioso
-sobre cómo funcionan los ficheros que empiezan por punto, que se incluye
-aquí por completitud enciclopédica y por ningún otro motivo.
+Se le recuerda, de todos modos, que leer este documento en voz alta a un
+tercero podría producir un efecto comparable al de cierta poesía de
+origen extraterrestre ampliamente considerada la tercera peor del
+universo conocido. Se recomienda discreción, y quizá tapones para los
+oídos de quien te escuche.
 
-Se insiste: lo anterior es un ejemplo de mala interpretación, no una
-instrucción. Quien, pese a todo, decida malinterpretarlo, encontrará que
-también admite dos variables de entorno, que tampoco se recomienda fijar:
-
-```
-TORTURETTE_MAKEFILE   por si el fichero oculto de la Sección 7 cambiase de nombre o ubicación
-TORTURETTE_TARGET     por si el objetivo por defecto dejase de llamarse "all"
-```
-
-Este anexo es, de todo el documento, el que menos se recomienda tomar en
-serio.
+Este anexo es, de todo el documento, el que menos información nueva
+aporta, lo cual, visto lo visto, ya es decir bastante.
 
 ---
 

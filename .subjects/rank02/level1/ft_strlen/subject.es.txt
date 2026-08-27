@@ -1,0 +1,10 @@
+Nombre del ejercicio: ft_strlen
+Ficheros esperados: ft_strlen.c
+Funciones autorizadas:
+--------------------------------------------------------------------------------
+
+Escribe una función que devuelva la longitud de una cadena.
+
+Tu función debe declararse de la siguiente manera:
+
+int	ft_strlen(char *str);

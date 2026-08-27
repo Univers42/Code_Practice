@@ -1,0 +1,10 @@
+Nombre del ejercicio: ft_strdup
+Ficheros esperados: ft_strdup.c
+Funciones autorizadas: malloc
+--------------------------------------------------------------------------------
+
+Reproduce el comportamiento de la función strdup (man strdup).
+
+Tu función debe declararse de la siguiente manera:
+
+char    *ft_strdup(char *src);

@@ -1,0 +1,10 @@
+Nombre del ejercicio: ft_strcmp
+Ficheros esperados: ft_strcmp.c
+Funciones autorizadas:
+--------------------------------------------------------------------------------
+
+Reproduce el comportamiento de la función strcmp (man strcmp).
+
+Tu función debe declararse de la siguiente manera:
+
+int    ft_strcmp(char *s1, char *s2);

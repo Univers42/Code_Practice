@@ -1,0 +1,11 @@
+Nombre del ejercicio: ft_swap
+Ficheros esperados: ft_swap.c
+Funciones autorizadas:
+--------------------------------------------------------------------------------
+
+Escribe una función que intercambie el contenido de dos enteros cuyas
+direcciones se pasan como parámetros.
+
+Tu función debe declararse de la siguiente manera:
+
+void	ft_swap(int *a, int *b);

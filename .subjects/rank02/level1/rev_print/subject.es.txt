@@ -1,0 +1,18 @@
+Nombre del ejercicio: rev_print
+Ficheros esperados: rev_print.c
+Funciones autorizadas: write
+--------------------------------------------------------------------------------
+
+Escribe un programa que reciba una cadena y la muestre invertida, seguida de
+un salto de línea.
+
+Si el número de parámetros no es 1, el programa muestra un salto de línea.
+
+Ejemplos:
+
+$> ./rev_print "zaz" | cat -e
+zaz$
+$> ./rev_print "dub0 a POIL" | cat -e
+LIOP a 0bud$
+$> ./rev_print | cat -e
+$

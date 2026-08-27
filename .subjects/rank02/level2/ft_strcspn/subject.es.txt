@@ -1,0 +1,11 @@
+Nombre del ejercicio: ft_strcspn
+Ficheros esperados: ft_strcspn.c
+Funciones autorizadas: Ninguna
+--------------------------------------------------------------------------------
+
+Reproduce exactamente el comportamiento de la función strcspn
+(man strcspn).
+
+La función debe prototiparse de la siguiente manera:
+
+size_t	ft_strcspn(const char *s, const char *reject);

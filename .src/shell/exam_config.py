@@ -51,15 +51,16 @@ def validate_rank_data() -> list[str]:
                 f"exercises available ({len(exercise_names)})"
             )
         rank_dir = f"rank{rank:02d}"
+        extension = "c" if rank == 2 else "py"
         for name in exercise_names:
             subject_dir = REPO_ROOT / subjects_dir / name
             solution_file = (
                 REPO_ROOT / ".src" / rank_dir / "solutions" / name
-                / f"{name}_solution.py"
+                / f"{name}_solution.{extension}"
             )
             tester_file = (
                 REPO_ROOT / ".src" / rank_dir / "testers" / name
-                / f"{name}_test.py"
+                / f"{name}_test.{extension}"
             )
             if not subject_dir.is_dir():
                 problems.append(f"rank{rank:02d}/{name}: missing subject dir")

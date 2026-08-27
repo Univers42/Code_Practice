@@ -33,6 +33,16 @@ def _fail(config: ExamConfig, message: str) -> list[Any]:
 
 
 def choice_test(config: ExamConfig) -> list[Any]:
+    if config.rank == 2:
+        return tester_c(config)
+    return tester_python(config)
+
+
+def tester_c(config: ExamConfig) -> list[Any]:
+    return _fail(config, "ERROR: C testing is not implemented yet")
+
+
+def tester_python(config: ExamConfig) -> list[Any]:
     exercise = config.current_exercise
     rank_dir = f"rank{config.rank:02d}"
 

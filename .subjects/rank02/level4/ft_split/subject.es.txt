@@ -1,0 +1,14 @@
+Nombre del ejercicio: ft_split
+Ficheros esperados: ft_split.c
+Funciones autorizadas: malloc
+--------------------------------------------------------------------------------
+
+Escribe una función que reciba una cadena, la divida en palabras y las
+devuelva como un array de cadenas terminado en NULL.
+
+Una "palabra" se define como una parte de la cadena delimitada por
+espacios/tabulaciones/saltos de línea, o por el inicio/fin de la cadena.
+
+Tu función debe declararse de la siguiente manera:
+
+char    **ft_split(char *str);

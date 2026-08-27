@@ -1,0 +1,38 @@
+Nombre del ejercicio: fizzbuzz
+Ficheros esperados: fizzbuzz.c
+Funciones autorizadas: write
+--------------------------------------------------------------------------------
+
+Escribe un programa que muestre los números del 1 al 100, cada uno separado
+por un salto de línea.
+
+Si el número es múltiplo de 3, muestra 'fizz' en su lugar.
+
+Si el número es múltiplo de 5, muestra 'buzz' en su lugar.
+
+Si el número es múltiplo de 3 y de 5 a la vez, muestra 'fizzbuzz' en su lugar.
+
+Ejemplo:
+
+$>./fizzbuzz
+1
+2
+fizz
+4
+buzz
+fizz
+7
+8
+fizz
+buzz
+11
+fizz
+13
+14
+fizzbuzz
+[...]
+97
+98
+fizz
+buzz
+$>

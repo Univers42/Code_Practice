@@ -1,0 +1,12 @@
+Nombre del ejercicio: ft_strrev
+Ficheros esperados: ft_strrev.c
+Funciones autorizadas:
+--------------------------------------------------------------------------------
+
+Escribe una función que invierta (en el mismo sitio, in-place) una cadena.
+
+Debe devolver su parámetro.
+
+Tu función debe declararse de la siguiente manera:
+
+char    *ft_strrev(char *str);

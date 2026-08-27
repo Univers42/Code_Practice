@@ -12,6 +12,17 @@ from signals import safe_input
 from terminal import clear_screen, write_line
 
 
+def show_coming_soon(rank: int) -> None:
+    clear_screen()
+    write_line(colored(f"Rank {rank:02d}", "green"))
+    write_line(separator_line())
+    write_line("This rank isn't available yet. Check back soon!")
+    write_line(separator_line())
+    write_line(colored("Press [ENTER] to go back:\n", "gray"), end="")
+    while safe_input(interrupt_message="") != "":
+        continue
+
+
 def show_all_exercises(config: ExamConfig) -> None:
     while True:
         clear_screen()
@@ -66,13 +77,16 @@ def show_main_menu() -> None:
         clear_screen()
         write_line(colored("Welcome to samushell", "green"), 2)
         write_line(separator_line())
+        write_line(bracket_option("2", "Rank 02"))
         write_line(bracket_option("3", "Rank 03"))
         write_line(bracket_option("4", "Rank 04"))
         write_line(separator_line())
         write_line(bracket_option("q", "Exit"))
         write_line(separator_line())
         choice = safe_input(PROMPT, interrupt_message="")
-        if choice == "3":
+        if choice == "2":
+            show_coming_soon(2)
+        elif choice == "3":
             show_exam_menu(get_exam_config(3))
         elif choice == "4":
             show_exam_menu(get_exam_config(4))

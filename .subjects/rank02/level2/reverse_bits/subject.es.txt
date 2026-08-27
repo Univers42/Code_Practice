@@ -1,0 +1,20 @@
+Nombre del ejercicio: reverse_bits
+Ficheros esperados: reverse_bits.c
+Funciones autorizadas:
+--------------------------------------------------------------------------------
+
+Escribe una función que reciba un byte, lo invierta bit a bit (como en el
+ejemplo) y devuelva el resultado.
+
+Tu función debe declararse de la siguiente manera:
+
+unsigned char	reverse_bits(unsigned char octet);
+
+Ejemplo:
+
+  1 byte
+_____________
+ 0010  0110
+	 ||
+	 \/
+ 0110  0100

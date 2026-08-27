@@ -2,7 +2,7 @@ GREEN = "\033[32m"
 RED = "\033[31m"
 WHITE = "\033[37m"
 GRAY = "\033[90m"
-YELLOW = "\033[33m"
+YELLOW = "\033[93m"
 BLUE = "\033[34m"
 UNDERLINE = "\033[4m"
 RESET = "\033[0m"
@@ -31,6 +31,10 @@ def bracket_option(label: str, description: str) -> str:
 def underlined_header(text: str) -> str:
     padded = f"{text}{' ' * 10}"
     return f"{BLUE}{UNDERLINE}{padded}{RESET}"
+
+
+def separator_line(width: int = 40) -> str:
+    return colored("-" * width, "gray")
 
 
 EXERCISES_3_LEVELS: list[tuple[str, list[str]]] = [

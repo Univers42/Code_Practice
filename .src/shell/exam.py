@@ -218,6 +218,7 @@ def start_exam(config: ExamConfig) -> None:
                     copy_subject(config, exercise)
                     print_status(config, level, score, exercise, exam_deadline)
                 else:
+                    config.last_failure_time = time.time()
                     print(
                             colored(">>>>>FAILURE<<<<<", "red")
                         )
@@ -228,7 +229,6 @@ def start_exam(config: ExamConfig) -> None:
                     while safe_input() != "":
                         continue
                     config.retrys += 1
-                    config.last_failure_time = time.time()
                     command = safe_input(PROMPT)
                     continue
         elif command == "finish":

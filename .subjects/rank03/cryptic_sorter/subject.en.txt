@@ -2,7 +2,7 @@ Exercise name: cryptic_sorter
 Turn-in directory: rendu/cryptic_sorter
 Files to turn in: cryptic_sorter.py
 Allowed functions: None specified
-Forbidden functions: None specified
+Forbidden functions: sorted()
 
 Write a function that sorts a list of strings according to several criteria.
 

@@ -2,7 +2,7 @@ Nombre del ejercicio: cryptic_sorter
 Directorio de entrega: rendu/cryptic_sorter
 Archivos a entregar: cryptic_sorter.py
 Funciones autorizadas: No especificado
-Funciones prohibidas: No especificado
+Funciones prohibidas: sorted()
 
 Escribe una función que ordene una lista de cadenas según varios criterios.
 

@@ -4,6 +4,7 @@ from types import ModuleType
 from typing import Any
 
 from exam_config import ExamConfig
+from restrictions import parse_forbidden_functions, used_forbidden_functions
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -44,6 +45,9 @@ def choice_test(config: ExamConfig) -> list[Any]:
         / f"{exercise}_test.py"
     )
     rendu_path = REPO_ROOT / "rendu" / exercise / f"{exercise}.py"
+    subject_path = (
+        REPO_ROOT / config.subjects_dir / exercise / "subject.en.txt"
+    )
 
     try:
         solution_module = _load_module(f"{exercise}_solution", solution_path)
@@ -62,6 +66,18 @@ def choice_test(config: ExamConfig) -> list[Any]:
         return _fail(
             config, f"ERROR: no function named '{exercise}' in your file"
         )
+
+    try:
+        forbidden = parse_forbidden_functions(subject_path)
+        rendu_source = rendu_path.read_text()
+    except OSError:
+        forbidden, rendu_source = [], ""
+    used = used_forbidden_functions(rendu_source, forbidden)
+    if used:
+        return _fail(
+            config, f"ERROR: forbidden function(s) used: {', '.join(used)}"
+        )
+
     report: list[Any] = []
     passed = True
     for n, test in enumerate(test_cases, 1):

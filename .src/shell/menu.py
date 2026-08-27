@@ -68,6 +68,7 @@ def show_main_menu() -> None:
         write_line(separator_line())
         write_line(bracket_option("3", "Rank 03"))
         write_line(bracket_option("4", "Rank 04"))
+        write_line(separator_line())
         write_line(bracket_option("q", "Exit"))
         write_line(separator_line())
         choice = safe_input(PROMPT, interrupt_message="")

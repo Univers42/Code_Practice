@@ -1,0 +1,29 @@
+Nombre del ejercicio: string_permutation_checker
+Directorio de entrega: rendu/string_permutation_checker
+Archivos a entregar: string_permutation_checker.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una función que determine si dos cadenas son permutaciones la una de la otra.
+
+Dadas dos cadenas s1 y s2, la función debe determinar si una puede obtenerse reordenando los caracteres de la otra. La comparación distingue mayúsculas de minúsculas y los espacios y signos de puntuación cuentan como caracteres normales.
+
+Reglas:
+- La comparación distingue mayúsculas de minúsculas ('A' es distinto de 'a').
+- Los espacios y signos de puntuación cuentan como caracteres normales.
+- Dos cadenas vacías son permutaciones entre sí (True).
+- Cadenas de distinta longitud no pueden ser permutaciones.
+
+La función deberá ser declarada como:
+
+def string_permutation_checker(s1: str, s2: str) -> bool:
+
+Ejemplos de salida esperados:
+Input: string_permutation_checker("abc", "bca") -> True
+Input: string_permutation_checker("abc", "def") -> False
+Input: string_permutation_checker("listen", "silent") -> True
+Input: string_permutation_checker("hello", "bello") -> False
+Input: string_permutation_checker("", "") -> True
+Input: string_permutation_checker("a", "") -> False
+Input: string_permutation_checker("Abc", "abc") -> False
+Input: string_permutation_checker("a gentleman", "elegant man") -> True

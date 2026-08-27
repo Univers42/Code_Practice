@@ -1,0 +1,26 @@
+Nombre del ejercicio: mirror_matrix
+Directorio de entrega: rendu/mirror_matrix
+Archivos a entregar: mirror_matrix.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una función que invierta cada fila de una matriz 2D.
+
+Dada una matriz 2D matrix (una lista de listas), la función debe devolver una nueva matriz en la que cada fila aparezca invertida.
+
+Reglas:
+- Cada fila del resultado es la fila de entrada correspondiente invertida.
+- El orden de las filas no cambia.
+- Debe devolverse una nueva matriz (no se modifica la entrada).
+- Deben tratarse correctamente las matrices con una sola fila o un solo elemento.
+
+La función deberá ser declarada como:
+
+def mirror_matrix(matrix: list[list[int]]) -> list[list[int]]:
+
+Ejemplos de salida esperados:
+Input: mirror_matrix([[1, 2, 3], [4, 5, 6]]) -> [[3, 2, 1], [6, 5, 4]]
+Input: mirror_matrix([[1, 2], [3, 4], [5, 6]]) -> [[2, 1], [4, 3], [6, 5]]
+Input: mirror_matrix([[7]]) -> [[7]]
+Input: mirror_matrix([[1, 2, 3, 4]]) -> [[4, 3, 2, 1]]
+Input: mirror_matrix([[-1, -2], [-3, -4]]) -> [[-2, -1], [-4, -3]]

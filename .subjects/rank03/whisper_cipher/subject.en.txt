@@ -1,0 +1,27 @@
+Exercise name: whisper_cipher
+Turn-in directory: rendu/whisper_cipher
+Files to turn in: whisper_cipher.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that applies a Caesar cipher, shifting the letters of a string by a given amount.
+
+Given a string text and an integer shift, the function must return the string with every letter shifted shift positions through the alphabet, wrapping around from 'z' to 'a'. Uppercase and lowercase letters keep their case, non-alphabetic characters stay unchanged, and the shift may be negative (shift to the left).
+
+Rules:
+- Each letter is shifted shift positions through the alphabet, wrapping around ('z' + 1 -> 'a').
+- Uppercase letters stay uppercase and lowercase letters stay lowercase.
+- Non-alphabetic characters remain unchanged.
+- The shift may be negative (shift to the left).
+
+The function must be declared as:
+
+def whisper_cipher(text: str, shift: int) -> str:
+
+Expected output examples:
+Input: whisper_cipher("hello", 3) -> "khoor"
+Input: whisper_cipher("Hello World!", 1) -> "Ifmmp Xpsme!"
+Input: whisper_cipher("xyz", 3) -> "abc"
+Input: whisper_cipher("ABC123def", 5) -> "FGH123ijk"
+Input: whisper_cipher("", 10) -> ""
+Input: whisper_cipher("abc", -3) -> "xyz"

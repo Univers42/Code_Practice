@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from constants import EXERCISE_NAMES
+from exam_config import ExamConfig
 
 
 def recreate_dir(path: str) -> None:
@@ -16,12 +16,12 @@ def prepare_exam_directories() -> None:
     recreate_dir("subject")
 
 
-def copy_subject(exercise: int) -> None:
-    name = EXERCISE_NAMES[exercise]
+def copy_subject(config: ExamConfig, exercise: int) -> None:
+    name = config.exercise_names[exercise]
     destination = Path("subject") / name
     if destination.exists():
         shutil.rmtree(destination)
-    shutil.copytree(f".subjects/{name}", destination)
+    shutil.copytree(f"{config.subjects_dir}/{name}", destination)
 
 
 def cleanup_subject_dir() -> None:

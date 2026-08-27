@@ -1,7 +1,8 @@
 import readline  # noqa: F401 - enables arrow-key history for input()
 
 from clock import format_remaining_time, get_remaining_time, start_exam_clock
-from constants import EXERCISE_NAMES, PROMPT, colored
+from constants import PROMPT, colored
+from exam_config import ExamConfig
 from exercises import pick_random_exercise
 from filesystem import copy_subject, prepare_exam_directories
 from signals import safe_input
@@ -21,15 +22,26 @@ def confirm(question: str) -> bool:
 
 
 def print_status(
-    level: int, score: int, exercise: int, exam_deadline: float
+    config: ExamConfig,
+    level: int,
+    score: int,
+    exercise: int,
+    exam_deadline: float,
 ) -> None:
-    name = EXERCISE_NAMES[exercise]
+    name = config.exercise_names[exercise]
     remaining = format_remaining_time(get_remaining_time(exam_deadline))
-    print(f"Actual exercise: {colored(f'{level}/4', 'green')} {name}. ",
-          end="")
+    available = config.points_for_level(level)
+    print(
+        f"Actual exercise: "
+        f"{colored(f'{level}/{config.last_level}', 'green')} "
+        f"{name}. ",
+        end="",
+    )
     print(subject_files_message(name))
     print(f"Actual score: {colored(f'{score}/100', 'green')}")
-    print(colored("25 points available in current exercise.", "green"))
+    print(colored(
+        f"{available} points available in current exercise.", "green"
+    ))
     print(colored(remaining, "green"))
 
 
@@ -58,10 +70,10 @@ def print_practice_commands() -> None:
     write_line(f"{colored('finish', 'green')}: to finish your exam.")
 
 
-def practice_exercise(exercise: int) -> None:
-    copy_subject(exercise)
+def practice_exercise(config: ExamConfig, exercise: int) -> None:
+    copy_subject(config, exercise)
     clear_screen()
-    name = EXERCISE_NAMES[exercise]
+    name = config.exercise_names[exercise]
     print(f"Actual exercise: {colored(name, 'green')}")
     print(subject_files_message(name))
     print_practice_commands()
@@ -77,7 +89,8 @@ def practice_exercise(exercise: int) -> None:
         command = safe_input(PROMPT)
 
 
-def start_exam(exercises: list[int]) -> None:
+def start_exam(config: ExamConfig) -> None:
+    exercises = config.exercise_pool()
     clear_screen()
     write_line("Enter your login: ", end="")
     login = safe_input()
@@ -85,7 +98,7 @@ def start_exam(exercises: list[int]) -> None:
                wait=1)
 
     write_line(f"You have {colored('1', 'green')} exam available.", wait=2)
-    write_line("You are entering in the real exam mode.")
+    write_line("You are entering the real exam mode.")
     write_line(
         f"You have {colored('3 hours', 'green')} remaining "
         "to finish your exercises."
@@ -96,19 +109,19 @@ def start_exam(exercises: list[int]) -> None:
         continue
     prepare_exam_directories()
     exam_deadline = start_exam_clock(hours=3)
-    level = 1
+    level = 0
     score = 0
     exercise = pick_random_exercise(exercises)
-    copy_subject(exercise)
-    print_status(level, score, exercise, exam_deadline)
+    copy_subject(config, exercise)
+    print_status(config, level, score, exercise, exam_deadline)
     command = safe_input(PROMPT)
-    while command != "finish" or level > 4:
+    while command != "finish":
         if get_remaining_time(exam_deadline) <= 0:
             print(colored("Time's up! Your exam has ended.", "red"))
             print(f"Final score: {colored(f'{score}/100', 'green')}")
             break
         if command == "status":
-            print_status(level, score, exercise, exam_deadline)
+            print_status(config, level, score, exercise, exam_deadline)
             print_commands()
         elif command == "grademe":
             if confirm("Are you completely sure?"):
@@ -121,11 +134,12 @@ def start_exam(exercises: list[int]) -> None:
                 while safe_input() != "":
                     continue
                 level += 1
-                score += 25
-                if level <= 4:
-                    exercise = pick_random_exercise(exercises)
-                    copy_subject(exercise)
-                    print_status(level, score, exercise, exam_deadline)
+                score = config.score_after(level)
+                if level > config.last_level:
+                    break
+                exercise = pick_random_exercise(exercises)
+                copy_subject(config, exercise)
+                print_status(config, level, score, exercise, exam_deadline)
         elif command == "finish":
             break
         elif command == "clear":
@@ -134,12 +148,13 @@ def start_exam(exercises: list[int]) -> None:
             print("Unrecognized command. Type 'status' for more information.")
 
         command = safe_input(PROMPT)
-    if level > 4:
-        level = 4
+    if level > config.last_level:
+        level = config.last_level
     write_line(
-        f"You reach at excersice {colored(f"{level}/4", 'green')}", 2
+        f"You reached exercise "
+        f"{colored(f'{level}/{config.last_level}', 'green')}", 2
     )
     if score == 100:
         write_line(
-                colored("You reach max score!", "green"), 2
+                colored("You reached max score!", "green"), 2
             )

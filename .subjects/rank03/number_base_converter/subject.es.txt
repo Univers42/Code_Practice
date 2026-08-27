@@ -1,0 +1,29 @@
+Nombre del ejercicio: number_base_converter
+Directorio de entrega: rendu/number_base_converter
+Archivos a entregar: number_base_converter.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una función que convierta un número de una base a otra.
+
+Dada una cadena number expresada en base from_base, la función debe devolver su representación en base to_base. Se admiten bases de 2 a 36 inclusive, usando los dígitos 0-9 y las letras A-Z para los valores de 10 a 35.
+
+Reglas:
+- Las bases admitidas van de 2 a 36 inclusive.
+- Se usan los dígitos 0-9 y las letras mayúsculas A-Z (valores de 10 a 35).
+- Debe devolverse la cadena "ERROR" ante cualquier entrada inválida (base fuera de rango, dígito no válido para from_base, etc.).
+- Las letras del resultado deben ir en mayúscula.
+
+La función deberá ser declarada como:
+
+def number_base_converter(number: str, from_base: int, to_base: int) -> str:
+
+Ejemplos de salida esperados:
+Input: number_base_converter("1010", 2, 10) -> "10"
+Input: number_base_converter("FF", 16, 10) -> "255"
+Input: number_base_converter("255", 10, 16) -> "FF"
+Input: number_base_converter("123", 10, 2) -> "1111011"
+Input: number_base_converter("Z", 36, 10) -> "35"
+Input: number_base_converter("35", 10, 36) -> "Z"
+Input: number_base_converter("123", 1, 10) -> "ERROR"
+Input: number_base_converter("G", 16, 10) -> "ERROR"

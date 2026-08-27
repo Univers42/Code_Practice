@@ -9,5 +9,4 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, handle_sigint)
     atexit.register(cleanup_subject_dir)
     prepare_exam_directories()
-    exercises: list[int] = [0, 1, 2, 3, 4, 5, 6]
-    show_main_menu(exercises)
+    show_main_menu()

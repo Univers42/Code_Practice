@@ -1,0 +1,30 @@
+Exercise name: bracket_validator
+Turn-in directory: rendu/bracket_validator
+Files to turn in: bracket_validator.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that checks whether the brackets in a string are valid.
+
+Given a string s, the function must determine whether every opening bracket has its matching closing bracket in the correct order. The brackets to consider are (), [] and {}. Any other character in the string must be ignored.
+
+Rules:
+- The bracket types to consider are (), [] and {}.
+- Every opening bracket must be closed by a bracket of the same type.
+- Brackets must be closed in the correct order.
+- Characters that are not brackets are ignored.
+- An empty string is valid (True).
+
+The function must be declared as:
+
+def bracket_validator(s: str) -> bool:
+
+Expected output examples:
+Input: bracket_validator("()") -> True
+Input: bracket_validator("()[]{}") -> True
+Input: bracket_validator("(]") -> False
+Input: bracket_validator("([)]") -> False
+Input: bracket_validator("{[]}") -> True
+Input: bracket_validator("hello(world)") -> True
+Input: bracket_validator("((())") -> False
+Input: bracket_validator("") -> True

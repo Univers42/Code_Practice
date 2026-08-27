@@ -1,0 +1,26 @@
+Exercise name: string_sculptor
+Turn-in directory: rendu/string_sculptor
+Files to turn in: string_sculptor.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that transforms a string by alternating the case of its alphabetic characters.
+
+Given a string text, the function must alternate the case of the alphabetic characters only: the first alphabetic character lowercase, the second uppercase, the third lowercase, and so on. Non-alphabetic characters stay unchanged and do not advance the alternation. A space resets the alternation, so the first alphabetic character after a space is lowercase again.
+
+Rules:
+- Only alphabetic characters change case.
+- The first alphabetic character is lowercase, the next uppercase, alternating.
+- Non-alphabetic characters remain unchanged and do not count towards the alternation index.
+- A space resets the alternation (the next alphabetic character after a space is lowercase again).
+
+The function must be declared as:
+
+def string_sculptor(text: str) -> str:
+
+Expected output examples:
+Input: string_sculptor("hello") -> "hElLo"
+Input: string_sculptor("Hello World") -> "hElLo wOrLd"
+Input: string_sculptor("abc123def") -> "aBc123DeF"
+Input: string_sculptor("Python3.9!") -> "pYtHoN3.9!"
+Input: string_sculptor("") -> ""

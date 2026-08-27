@@ -1,0 +1,26 @@
+Nombre del ejercicio: inter
+Directorio de entrega: rendu/inter
+Archivos a entregar: inter.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una función que devuelva una cadena con los caracteres que aparecen en ambas cadenas, sin repeticiones.
+
+Dadas dos cadenas s1 y s2, la función debe devolver una cadena con los caracteres presentes en ambas, sin caracteres repetidos, añadidos en el orden en que aparecen en s1.
+
+Reglas:
+- Solo se incluyen los caracteres presentes en ambas cadenas.
+- El resultado no debe contener caracteres repetidos.
+- Los caracteres se añaden en el orden en que aparecen en s1.
+- Si no hay caracteres comunes, el resultado es una cadena vacía.
+
+La función deberá ser declarada como:
+
+def inter(s1: str, s2: str) -> str:
+
+Ejemplos de salida esperados:
+Input: inter("hello", "world") -> "lo"
+Input: inter("banana", "band") -> "ban"
+Input: inter("abcabc", "bc") -> "bc"
+Input: inter("abc", "xyz") -> ""
+Input: inter("", "abc") -> ""

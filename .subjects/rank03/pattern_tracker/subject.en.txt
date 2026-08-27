@@ -1,0 +1,28 @@
+Exercise name: pattern_tracker
+Turn-in directory: rendu/pattern_tracker
+Files to turn in: pattern_tracker.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that counts the valid consecutive digit pairs in a string.
+
+Given a string text, the function must count how many pairs of adjacent characters are two digits where the second digit is exactly one greater than the first.
+
+Rules:
+- Only pairs of adjacent characters that are both digits count.
+- A pair is valid when the second digit is exactly one greater than the first.
+- A 9 followed by a 0 is not a valid pair.
+- Any pair containing a non-digit character does not count.
+
+The function must be declared as:
+
+def pattern_tracker(text: str) -> int:
+
+Expected output examples:
+Input: pattern_tracker("123") -> 2
+Input: pattern_tracker("12a34") -> 2
+Input: pattern_tracker("987654321") -> 0
+Input: pattern_tracker("01234567") -> 7
+Input: pattern_tracker("abc") -> 0
+Input: pattern_tracker("1a2b3c4") -> 0
+Input: pattern_tracker("112233") -> 2

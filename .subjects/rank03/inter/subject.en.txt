@@ -1,0 +1,26 @@
+Exercise name: inter
+Turn-in directory: rendu/inter
+Files to turn in: inter.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that returns a string with the characters that appear in both strings, without repetitions.
+
+Given two strings s1 and s2, the function must return a string containing the characters present in both, without repeated characters, added in the order they appear in s1.
+
+Rules:
+- Only characters present in both strings are included.
+- The result must not contain repeated characters.
+- Characters are added in the order they appear in s1.
+- If there are no common characters, the result is an empty string.
+
+The function must be declared as:
+
+def inter(s1: str, s2: str) -> str:
+
+Expected output examples:
+Input: inter("hello", "world") -> "lo"
+Input: inter("banana", "band") -> "ban"
+Input: inter("abcabc", "bc") -> "bc"
+Input: inter("abc", "xyz") -> ""
+Input: inter("", "abc") -> ""

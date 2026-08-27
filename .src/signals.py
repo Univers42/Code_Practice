@@ -15,4 +15,4 @@ def safe_input(prompt: str = "") -> str:
             return input(prompt)
         except ExamInterrupt:
             print()
-            write_line("Use finish for end the exam.")
+            write_line("Use finish to end the exam.")

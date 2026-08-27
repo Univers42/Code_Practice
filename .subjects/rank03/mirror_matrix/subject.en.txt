@@ -1,0 +1,26 @@
+Exercise name: mirror_matrix
+Turn-in directory: rendu/mirror_matrix
+Files to turn in: mirror_matrix.py
+Allowed functions: None specified
+Forbidden functions: None specified
+
+Write a function that reverses each row of a 2D matrix.
+
+Given a 2D matrix matrix (a list of lists), the function must return a new matrix in which each row appears reversed.
+
+Rules:
+- Each row of the result is the corresponding input row reversed.
+- The order of the rows does not change.
+- A new matrix must be returned (the input is not modified).
+- Matrices with a single row or a single element must be handled correctly.
+
+The function must be declared as:
+
+def mirror_matrix(matrix: list[list[int]]) -> list[list[int]]:
+
+Expected output examples:
+Input: mirror_matrix([[1, 2, 3], [4, 5, 6]]) -> [[3, 2, 1], [6, 5, 4]]
+Input: mirror_matrix([[1, 2], [3, 4], [5, 6]]) -> [[2, 1], [4, 3], [6, 5]]
+Input: mirror_matrix([[7]]) -> [[7]]
+Input: mirror_matrix([[1, 2, 3, 4]]) -> [[4, 3, 2, 1]]
+Input: mirror_matrix([[-1, -2], [-3, -4]]) -> [[-2, -1], [-4, -3]]

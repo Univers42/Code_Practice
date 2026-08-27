@@ -1,0 +1,26 @@
+Nombre del ejercicio: twist_sequence
+Directorio de entrega: rendu/twist_sequence
+Archivos a entregar: twist_sequence.py
+Funciones autorizadas: No especificado
+Funciones prohibidas: No especificado
+
+Escribe una función que rote una lista hacia la derecha k posiciones.
+
+Dada una lista de enteros arr y un entero k, la función debe devolver una nueva lista rotada hacia la derecha k posiciones, es decir, los últimos k elementos pasan al principio. Si k es mayor que la longitud de la lista, se da la vuelta (se toma k módulo la longitud).
+
+Reglas:
+- Rotar a la derecha k posiciones lleva los últimos k elementos al principio.
+- Si k es mayor que la longitud de la lista, se da la vuelta (k módulo la longitud).
+- Un k de 0 deja la lista sin cambios.
+- Debe tratarse correctamente una lista vacía.
+
+La función deberá ser declarada como:
+
+def twist_sequence(arr: list[int], k: int) -> list[int]:
+
+Ejemplos de salida esperados:
+Input: twist_sequence([1, 2, 3, 4, 5], 2) -> [4, 5, 1, 2, 3]
+Input: twist_sequence([1, 2, 3], 1) -> [3, 1, 2]
+Input: twist_sequence([1, 2, 3, 4], 0) -> [1, 2, 3, 4]
+Input: twist_sequence([1, 2, 3], 5) -> [2, 3, 1]
+Input: twist_sequence([], 3) -> []

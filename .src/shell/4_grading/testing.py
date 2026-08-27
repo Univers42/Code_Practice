@@ -6,7 +6,7 @@ from typing import Any
 from exam_config import ExamConfig
 from restrictions import parse_forbidden_functions, used_forbidden_functions
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 def _load_module(name: str, path: Path) -> ModuleType:

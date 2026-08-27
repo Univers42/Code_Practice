@@ -3,7 +3,7 @@ from pathlib import Path
 
 from constants import EXERCISES_3, EXERCISES_4
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 @dataclass

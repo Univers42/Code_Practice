@@ -1,21 +1,16 @@
 import random
 import time
 
-import readline  # noqa: F401 - enables arrow-key history for input()
-
 from clock import format_remaining_time, get_remaining_time, start_exam_clock
 from constants import PROMPT, colored
 from cooldown import format_cooldown, get_remaining_cooldown
 from exam_config import ExamConfig
 from exercises import pick_random_exercise
 from filesystem import copy_subject, prepare_exam_directories
+from shared import subject_files_message
 from signals import safe_input
 from terminal import clear_screen, write_line
 from testing import choice_test
-
-
-def subject_files_message(name: str) -> str:
-    return f"\nSubject available in subject/{name}/"
 
 
 def confirm(question: str) -> bool:
@@ -88,58 +83,6 @@ def print_commands() -> None:
             f"{colored('clear', 'green')}: clear the samushell terminal."
         )
     write_line(f"{colored('finish', 'green')}: to finish your exam.")
-
-
-def print_practice_commands() -> None:
-    write_line("Available commands:")
-    write_line(
-        f"{colored('grademe', 'green')}: to evaluate your current exercise."
-    )
-    write_line(
-        f"{colored('clear', 'green')}: clear the samushell terminal."
-    )
-    write_line(f"{colored('finish', 'green')}: to finish your exam.")
-
-
-def practice_exercise(config: ExamConfig, exercise: int) -> None:
-    copy_subject(config, exercise)
-    clear_screen()
-    name = config.exercise_names[exercise]
-    print(f"Actual exercise: {colored(name, 'green')}")
-    print(subject_files_message(name))
-    print_practice_commands()
-    command = safe_input(PROMPT)
-    while command != "finish":
-        if command == "grademe":
-            result = choice_test(config)
-            if result[-1]:
-                print(
-                        colored(">>>>>PASSED<<<<<", "green")
-                    )
-                write_line(
-                    colored("Press [ENTER] to go back:\n", "gray"), end=""
-                    )
-                while safe_input() != "":
-                    continue
-                break
-            else:
-                print(
-                        colored(">>>>>FAILURE<<<<<", "red")
-                    )
-                write_line(
-                    colored("Press [ENTER] to retry:\n", "gray"), end=""
-                    )
-                while safe_input() != "":
-                    continue
-                config.retrys += 1
-                command = safe_input(PROMPT)
-                continue
-        elif command == "clear":
-            clear_screen()
-        else:
-            print("Unrecognized command. Type 'grademe' or 'finish'.")
-
-        command = safe_input(PROMPT)
 
 
 def start_exam(config: ExamConfig) -> None:

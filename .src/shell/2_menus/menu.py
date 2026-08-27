@@ -6,8 +6,9 @@ from constants import (
     separator_line,
     underlined_header,
 )
-from exam import practice_exercise, start_exam
 from exam_config import ExamConfig, get_exam_config
+from practice import practice_exercise
+from real_exam import start_exam
 from signals import safe_input
 from terminal import clear_screen, write_line
 

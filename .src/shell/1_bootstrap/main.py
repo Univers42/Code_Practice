@@ -1,5 +1,9 @@
+import pathsetup  # noqa: F401 - adds sibling module directories to sys.path
+
 import atexit
 import signal
+
+import readline  # noqa: F401 - enables arrow-key history for input()
 
 from exam_config import validate_rank_data
 from filesystem import cleanup_subject_dir, cleanup_traces_dir

@@ -5,7 +5,7 @@ from constants import PROMPT, colored
 from exam_config import ExamConfig
 from filesystem import copy_subject
 from shared import subject_files_message
-from signals import safe_input
+from signals import safe_input, wait_for_enter
 from terminal import clear_screen, write_line
 from testing import choice_test
 
@@ -63,8 +63,7 @@ def practice_exercise(config: ExamConfig, exercise: int) -> None:
                         colored("Press [ENTER] to go back:\n", "gray"),
                         end="",
                         )
-                    while safe_input() != "":
-                        continue
+                    wait_for_enter()
                     return
                 else:
                     print(
@@ -73,8 +72,7 @@ def practice_exercise(config: ExamConfig, exercise: int) -> None:
                     write_line(
                         colored("Press [ENTER] to retry:\n", "gray"), end=""
                         )
-                    while safe_input() != "":
-                        continue
+                    wait_for_enter()
                     config.retrys += 1
                     command = safe_input(PROMPT)
                     continue

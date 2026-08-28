@@ -8,7 +8,7 @@ from exam_config import ExamConfig
 from exercises import pick_random_exercise
 from filesystem import copy_subject, prepare_exam_directories
 from shared import subject_files_message
-from signals import safe_input
+from signals import safe_input, wait_for_enter
 from terminal import clear_screen, write_line
 from testing import choice_test
 
@@ -101,8 +101,7 @@ def start_exam(config: ExamConfig) -> None:
     )
     print_commands()
     write_line(colored("Press [ENTER] to start:\n", "gray"), end="")
-    while safe_input() != "":
-        continue
+    wait_for_enter()
     prepare_exam_directories()
     exam_deadline = start_exam_clock(hours=3)
     level = 0
@@ -135,8 +134,7 @@ def start_exam(config: ExamConfig) -> None:
                     write_line(
                         colored("Press [ENTER] to continue:\n", "gray"), end=""
                     )
-                    while safe_input() != "":
-                        continue
+                    wait_for_enter()
                     command = safe_input(PROMPT)
                     continue
                 simulate_grading_delay()
@@ -149,8 +147,7 @@ def start_exam(config: ExamConfig) -> None:
                     write_line(
                         colored("Press [ENTER] to continue:\n", "gray"), end=""
                     )
-                    while safe_input() != "":
-                        continue
+                    wait_for_enter()
                     level += 1
                     config.retrys = 0
                     config.last_failure_time = 0.0
@@ -169,8 +166,7 @@ def start_exam(config: ExamConfig) -> None:
                     write_line(
                         colored("Press [ENTER] to retry:\n", "gray"), end=""
                         )
-                    while safe_input() != "":
-                        continue
+                    wait_for_enter()
                     config.retrys += 1
                     command = safe_input(PROMPT)
                     continue

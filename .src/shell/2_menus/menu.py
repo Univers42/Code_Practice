@@ -9,7 +9,7 @@ from constants import (
 from exam_config import ExamConfig, get_exam_config
 from practice import practice_exercise
 from real_exam import start_exam
-from signals import safe_input
+from signals import safe_input, wait_for_enter
 from terminal import clear_screen, write_line
 
 
@@ -20,8 +20,7 @@ def show_coming_soon(rank: int) -> None:
     write_line("This rank isn't available yet. Check back soon!")
     write_line(separator_line())
     write_line(colored("Press [ENTER] to go back:\n", "gray"), end="")
-    while safe_input(interrupt_message="") != "":
-        continue
+    wait_for_enter()
 
 
 def show_all_exercises(config: ExamConfig) -> None:

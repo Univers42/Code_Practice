@@ -1,7 +1,9 @@
 # samushell — Protocolo de Evaluación Académica
 
 **Versión del documento:** la que corresponda
+
 **Clasificación:** Uso interno del examinando
+
 **Autoridad emisora:** el propio programa, que se considera a sí mismo suficientemente autorizado
 
 ---

@@ -10,4 +10,6 @@ TEST_CASES: list[Any] = [
     ['x', ''],
     [],
     ['one'],
+    ['ba', 'ab'],
+    ['ABC', 'abc'],
 ]

@@ -16,10 +16,10 @@ static int	digit_value(char c)
 
 int	ft_atoi_base(const char *str, int str_base)
 {
-	int	i;
-	int	sign;
-	int	result;
-	int	digit;
+	int				i;
+	int				sign;
+	unsigned int	result;
+	int				digit;
 
 	i = 0;
 	sign = 1;
@@ -32,9 +32,12 @@ int	ft_atoi_base(const char *str, int str_base)
 	digit = digit_value(str[i]);
 	while (digit >= 0 && digit < str_base)
 	{
-		result = result * str_base + digit;
+		/* unsigned arithmetic wraps predictably on overflow instead of
+		** triggering signed-integer-overflow UB on a very long digit
+		** string (the subject doesn't bound the input length). */
+		result = result * (unsigned int)str_base + (unsigned int)digit;
 		i++;
 		digit = digit_value(str[i]);
 	}
-	return (result * sign);
+	return ((int)result * sign);
 }

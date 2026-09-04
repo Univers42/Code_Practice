@@ -8,4 +8,7 @@ TEST_CASES: list[Any] = [
     ['quarante deux', 'qfqfsudf arzgsayns tsregfdgs sjytdekuoixq '],
     ['error', 'rrerrrfiiljdfxjyuifrrvcoojh'],
     [],
+    ['%s%n', '%s%n'],
+    ['abc', 'abc'],
+    ['abcd', 'abc'],
 ]

@@ -8,9 +8,9 @@ TEST_CASES: list[Any] = [
     ['255'],
     ['1'],
     ['128'],
-    ['170'],
-    # evenly spread across the whole byte range, so a hardcoded per-value
-    # table is as much work as writing the real bit manipulation.
-    ['3'], ['20'], ['37'], ['54'], ['71'], ['88'], ['105'], ['122'],
-    ['139'], ['156'], ['173'], ['190'], ['207'], ['224'], ['241'],
 ]
+
+
+def random_cases(rng) -> list[Any]:
+    """A fresh spread of bytes every run — nothing fixed to memorize."""
+    return [[str(rng.randint(0, 255))] for _ in range(15)]

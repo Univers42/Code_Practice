@@ -1,6 +1,9 @@
 import importlib.util
+import os
+import random
 import shutil
 import tempfile
+import time
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -47,10 +50,22 @@ def choice_test(config: ExamConfig) -> list[Any]:
 
 
 def _load_c_cases(exercise: str) -> list[tuple[list[str], bytes]]:
+    """Fixed TEST_CASES (if any) plus fresh random_cases(rng) (if the tester
+    defines one) generated NOW, with a new seed every call. Nothing about
+    them is stored on disk: reading the tester file, or even running the
+    reference as an oracle beforehand, doesn't tell you what this run's
+    random cases will be, which is the whole point — it closes off
+    memorized/hardcoded lookup-table answers regardless of how visible the
+    test files themselves are."""
     tester_path = RANK02_SRC / "testers" / exercise / f"{exercise}_test.py"
     module = _load_module(f"{exercise}_c_test", tester_path)
+    raw_cases = list(getattr(module, "TEST_CASES", []))
+    random_fn = getattr(module, "random_cases", None)
+    if random_fn is not None:
+        rng = random.Random(time.time_ns() ^ os.getpid())
+        raw_cases.extend(random_fn(rng))
     cases: list[tuple[list[str], bytes]] = []
-    for entry in module.TEST_CASES:
+    for entry in raw_cases:
         if isinstance(entry, dict):
             argv = [str(a) for a in entry.get("argv", [])]
             stdin = entry.get("stdin", "")
@@ -201,7 +216,8 @@ def tester_c(config: ExamConfig) -> list[Any]:
     exercise = config.current_exercise
     try:
         cases = _load_c_cases(exercise)
-    except (OSError, ImportError, SyntaxError, AttributeError) as error:
+    except (OSError, ImportError, SyntaxError, AttributeError, ValueError,
+            TypeError, IndexError) as error:
         return _fail(config, f"ERROR: exercise setup is broken: {error}")
     if not cases:
         return _fail(config, f"ERROR: no test cases defined for {exercise}")

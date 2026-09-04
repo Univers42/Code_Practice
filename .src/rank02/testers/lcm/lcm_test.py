@@ -10,5 +10,13 @@ TEST_CASES: list[Any] = [
     ['7', '7'],
     ['1', '1'],
     ['17', '13'],
-    ['46337', '46341'],
 ]
+
+
+def random_cases(rng) -> list[Any]:
+    cases = []
+    for _ in range(10):
+        a = rng.randint(0, 60000)
+        b = rng.randint(0, 60000)
+        cases.append([str(a), str(b)])
+    return cases

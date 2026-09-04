@@ -6,8 +6,8 @@ from constants import PROMPT, colored
 from cooldown import format_cooldown, get_remaining_cooldown
 from exam_config import ExamConfig
 from exercises import pick_random_exercise
-from filesystem import copy_subject, prepare_exam_directories
-from shared import subject_files_message
+from filesystem import copy_statement, prepare_exam_directories
+from shared import statement_files_message
 from signals import safe_input, wait_for_enter
 from terminal import clear_screen, write_line
 from testing import choice_test
@@ -37,7 +37,7 @@ def simulate_grading_delay() -> None:
         "green",
     ))
     for pause in grading_wait_pauses():
-        write_line(colored("wait...", "white"), pause)
+        write_line(colored("compiling...", "white"), pause)
 
 
 def trace_file_message(config: ExamConfig) -> str:
@@ -63,7 +63,7 @@ def print_status(
         f"{name}. ",
         end="",
     )
-    print(subject_files_message(name))
+    print(statement_files_message(name))
     print(f"Actual score: {colored(f'{score}/100', 'green')}")
     print(colored(
         f"{available} points available in current exercise.", "green"
@@ -74,24 +74,23 @@ def print_status(
 def print_commands() -> None:
     write_line("Available commands:")
     write_line(
-        f"{colored('grademe', 'green')}: to evaluate your current exercise."
+        f"{colored('evaluate', 'green')}: to evaluate your current exercise."
     )
     write_line(
-        f"{colored('status', 'green')}: to show your current status."
+        f"{colored('show', 'green')}: to show your current status."
     )
     write_line(
             f"{colored('clear', 'green')}: clear the samushell terminal."
         )
-    write_line(f"{colored('finish', 'green')}: to finish your exam.")
+    write_line(f"{colored('exit', 'green')}: to finish your exam.")
 
 
 def start_exam(config: ExamConfig) -> None:
     exercises = config.exercise_pool()
     clear_screen()
-    write_line("Enter your login: ", end="")
-    login = safe_input()
-    write_line(f"Loading the current exam from the student {login}...",
-               wait=1)
+    write_line("Enter your name: ", end="")
+    name = safe_input().strip() or "Mr. Anonymous"
+    write_line(f"Welcome, {name}.", wait=1)
 
     write_line(f"You have {colored('1', 'green')} exam available.", wait=2)
     write_line("You are entering the real exam mode.")
@@ -107,18 +106,18 @@ def start_exam(config: ExamConfig) -> None:
     level = 0
     score = 0
     exercise = pick_random_exercise(exercises)
-    copy_subject(config, exercise)
+    copy_statement(config, exercise)
     print_status(config, level, score, exercise, exam_deadline)
     command = safe_input(PROMPT)
-    while command != "finish":
+    while command != "exit":
         if get_remaining_time(exam_deadline) <= 0:
             print(colored("Time's up! Your exam has ended.", "red"))
             print(f"Final score: {colored(f'{score}/100', 'green')}")
             break
-        if command == "status":
+        if command == "show":
             print_status(config, level, score, exercise, exam_deadline)
             print_commands()
-        elif command == "grademe":
+        elif command == "evaluate":
             if confirm("Are you completely sure?"):
                 remaining_cooldown = get_remaining_cooldown(
                     config.last_failure_time, config.retrys
@@ -155,7 +154,7 @@ def start_exam(config: ExamConfig) -> None:
                     if level > config.last_level:
                         break
                     exercise = pick_random_exercise(exercises)
-                    copy_subject(config, exercise)
+                    copy_statement(config, exercise)
                     print_status(config, level, score, exercise, exam_deadline)
                 else:
                     config.last_failure_time = time.time()
@@ -170,12 +169,12 @@ def start_exam(config: ExamConfig) -> None:
                     config.retrys += 1
                     command = safe_input(PROMPT)
                     continue
-        elif command == "finish":
+        elif command == "exit":
             break
         elif command == "clear":
             clear_screen()
         else:
-            print("Unrecognized command. Type 'status' for more information.")
+            print("Unrecognized command. Type 'show' for more information.")
 
         command = safe_input(PROMPT)
     if level > config.last_level:

@@ -91,8 +91,8 @@ def _copy_c_files(
     src_dir: Path, dest: Path, skip: set[str] = frozenset(), decrypted: bool = False
 ) -> list[str]:
     """decrypted=True for solutions/ (encrypted at rest, e.g. ft_split.c.enc):
-    decrypt each into dest under its plain name. decrypted=False for rendu/
-    (the student's own plain files): copy as-is."""
+    decrypt each into dest under its plain name. decrypted=False for
+    projects/ (the student's own plain files): copy as-is."""
     names: list[str] = []
     pattern = "*.c.enc" if decrypted else "*.c"
     for path in sorted(src_dir.glob(pattern)):
@@ -130,15 +130,15 @@ def _prepare_builds(
     exercise = config.current_exercise
     kind = config.kind_of(exercise)
     sol_dir = RANK02_SRC / "solutions" / exercise
-    rendu_dir = REPO_ROOT / "rendu" / exercise
+    projects_dir = REPO_ROOT / "projects" / exercise
 
     if not sol_dir.is_dir():
         return _fail(config, f"ERROR: no reference for {exercise}")
-    if not list(rendu_dir.glob("*.c")):
+    if not list(projects_dir.glob("*.c")):
         return _fail(
             config,
             f"ERROR: nothing turned in "
-            f"(expected rendu/{exercise}/{exercise}.c)",
+            f"(expected projects/{exercise}/{exercise}.c)",
         )
 
     ref = work / "ref"
@@ -163,11 +163,11 @@ def _prepare_builds(
         ref_srcs = ["main.c"] + _copy_c_files(
             sol_dir, ref, skip={"main.c"}, decrypted=True
         )
-        stu_own_srcs = _copy_c_files(rendu_dir, stu)
+        stu_own_srcs = _copy_c_files(projects_dir, stu)
         stu_srcs = ["main.c"] + stu_own_srcs
     else:
         ref_srcs = _copy_c_files(sol_dir, ref, decrypted=True)
-        stu_own_srcs = _copy_c_files(rendu_dir, stu)
+        stu_own_srcs = _copy_c_files(projects_dir, stu)
         stu_srcs = stu_own_srcs
 
     return ref, stu, ref_srcs, stu_srcs, stu_own_srcs
@@ -178,13 +178,13 @@ def _check_allowed_functions(
 ) -> list[Any] | None:
     """Only the student's own files, never the reference or our driver:
     the alumno can use whatever they want internally, this only checks what
-    THEIR turn-in calls externally against the subject's whitelist."""
+    THEIR turn-in calls externally against the statement's whitelist."""
     exercise = config.current_exercise
-    subject_path = REPO_ROOT / config.subjects_dir / exercise / "subject.en.txt"
+    statement_path = REPO_ROOT / config.statements_dir / exercise / "statement.en.txt"
     try:
-        allowed = parse_allowed_functions_text(read_maybe_encrypted(subject_path).decode())
+        allowed = parse_allowed_functions_text(read_maybe_encrypted(statement_path).decode())
     except (OSError, VaultError):
-        return None  # can't read the subject: don't block grading over it
+        return None  # can't read the statement: don't block grading over it
 
     objects = []
     for src in stu_own_srcs:
@@ -321,9 +321,9 @@ def tester_python(config: ExamConfig) -> list[Any]:
         REPO_ROOT / ".src" / rank_dir / "testers" / exercise
         / f"{exercise}_test.py"
     )
-    rendu_path = REPO_ROOT / "rendu" / exercise / f"{exercise}.py"
-    subject_path = (
-        REPO_ROOT / config.subjects_dir / exercise / "subject.en.txt"
+    project_path = REPO_ROOT / "projects" / exercise / f"{exercise}.py"
+    statement_path = (
+        REPO_ROOT / config.statements_dir / exercise / "statement.en.txt"
     )
 
     try:
@@ -337,8 +337,8 @@ def tester_python(config: ExamConfig) -> list[Any]:
         return _fail(config, f"ERROR: exercise setup is broken: {error}")
 
     try:
-        rendu_module = _load_module(exercise, rendu_path)
-        rendu_fn = getattr(rendu_module, exercise)
+        project_module = _load_module(exercise, project_path)
+        project_fn = getattr(project_module, exercise)
     except (OSError, ImportError, SyntaxError) as error:
         return _fail(config, f"ERROR: {error}")
     except AttributeError:
@@ -348,12 +348,12 @@ def tester_python(config: ExamConfig) -> list[Any]:
 
     try:
         forbidden = parse_forbidden_functions_text(
-            read_maybe_encrypted(subject_path).decode()
+            read_maybe_encrypted(statement_path).decode()
         )
-        rendu_source = rendu_path.read_text()
+        project_source = project_path.read_text()
     except (OSError, VaultError):
-        forbidden, rendu_source = [], ""
-    used = used_forbidden_functions(rendu_source, forbidden)
+        forbidden, project_source = [], ""
+    used = used_forbidden_functions(project_source, forbidden)
     if used:
         return _fail(
             config, f"ERROR: forbidden function(s) used: {', '.join(used)}"
@@ -371,7 +371,7 @@ def tester_python(config: ExamConfig) -> list[Any]:
                 f"(input: {test}): {error}",
             )
         try:
-            your_result = rendu_fn(*test)
+            your_result = project_fn(*test)
         except Exception as e:
             report.append(f"test {n} [KO]\nInput: {test}\nError: {e}")
             passed = False

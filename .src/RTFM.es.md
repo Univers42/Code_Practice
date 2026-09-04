@@ -65,7 +65,7 @@ entre tú y una terminal.
 - Un ordenador.
 - Python 3, en una versión que el propio código no se molesta en verificar,
   bajo la sana asunción de que si estás leyendo esto, ya lo tienes resuelto.
-- Una carpeta llamada `rendu`, que aparecerá sola cuando corresponda y
+- Una carpeta llamada `projects`, que aparecerá sola cuando corresponda y
   desaparecerá igual de sola cuando ya no.
 - Cierta tolerancia a Torturette. Véase la Sección 1 para la aclaración
   pertinente sobre qué es, y sobre todo, qué no es.
@@ -111,8 +111,8 @@ algún momento indeterminado de tu paso por Torturette:
   desproporcionada para lo poco que realmente explica.
 - La frase `>>>>>FAILURE<<<<<` en rojo, que produce lo contrario, también
   de forma desproporcionada.
-- La palabra `wait...` repetida entre una y tres veces, con pausas que no
-  siguen ningún patrón que se te vaya a comunicar de antemano.
+- La palabra `compiling...` repetida entre una y tres veces, con pausas
+  que no siguen ningún patrón que se te vaya a comunicar de antemano.
 - Un aviso, en amarillo, informándote de que debes esperar cierto tiempo
   antes de volver a intentarlo. Ese tiempo crece con cada intento fallido,
   según una fórmula que existe, es real, y que no vas a necesitar conocer
@@ -140,8 +140,8 @@ que la terminal podría parecer, a tus ojos, "congelada":
 
 - Está esperando a que pulses `[ENTER]`, como te ha pedido, en gris, hace
   ya un rato.
-- Está en mitad de uno de los `wait...` mencionados en la sección anterior,
-  y simplemente no ha terminado todavía.
+- Está en mitad de uno de los `compiling...` mencionados en la sección
+  anterior, y simplemente no ha terminado todavía.
 - Estás en cooldown, y el amarillo de antes no era una sugerencia.
 - Torturette, en general, tiende a sentirse así. No hay nada roto, es
   simplemente su carácter.
@@ -192,7 +192,7 @@ coincidencia lingüística.
 **¿Y si me quedo atascado en un ejercicio?**
 Ese es precisamente el punto de un examen.
 
-**¿Puedo usar `grademe` varias veces seguidas sin parar?**
+**¿Puedo usar `evaluate` varias veces seguidas sin parar?**
 Técnicamente sí. Filosóficamente, el programa preferiría que reflexionaras
 un poco entre intento e intento. Tiene sus formas de insistir en ello.
 

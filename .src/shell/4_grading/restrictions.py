@@ -4,8 +4,8 @@ from pathlib import Path
 FORBIDDEN_LINE_PREFIX = "Forbidden functions:"
 
 
-def parse_forbidden_functions(subject_path: Path) -> list[str]:
-    return parse_forbidden_functions_text(subject_path.read_text())
+def parse_forbidden_functions(statement_path: Path) -> list[str]:
+    return parse_forbidden_functions_text(statement_path.read_text())
 
 
 def parse_forbidden_functions_text(text: str) -> list[str]:

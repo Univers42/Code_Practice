@@ -1,9 +1,9 @@
-"""Encryption at rest for rank02 subjects/solutions/testers.
+"""Encryption at rest for rank02 statements/solutions/testers.
 
 Not a defense against a determined attacker with local admin rights — the
-key lives in the same repo. The point is that nothing in .src/.subjects/rank02,
+key lives in the same repo. The point is that nothing in .src/.statements/rank02,
 .src/rank02/solutions or .src/rank02/testers sits on disk in plain text:
-each piece is decrypted only at the moment it's actually needed (a subject
+each piece is decrypted only at the moment it's actually needed (a statement
 when it's handed to the student, a reference/tester when a grading attempt
 compiles it into its own ephemeral sandbox), and never written back out in
 the clear anywhere permanent.

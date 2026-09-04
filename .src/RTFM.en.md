@@ -65,7 +65,7 @@ you and a terminal.
 - Python 3, in a version the code itself doesn't bother checking, on
   the healthy assumption that if you're reading this, you've already
   taken care of it.
-- A folder called `rendu`, which will show up on its own when
+- A folder called `projects`, which will show up on its own when
   appropriate, and disappear just as quietly when it no longer is.
 - A certain tolerance for Torturette. See Section 1 for the relevant
   clarification on what it is, and above all, what it isn't.
@@ -114,8 +114,9 @@ during your time with Torturette:
   explains.
 - The phrase `>>>>>FAILURE<<<<<` in red, which produces the opposite,
   equally disproportionately.
-- The word `wait...` repeated between one and three times, with pauses
-  that follow no pattern that will be communicated to you in advance.
+- The word `compiling...` repeated between one and three times, with
+  pauses that follow no pattern that will be communicated to you in
+  advance.
 - A warning, in yellow, informing you that you must wait a certain
   amount of time before trying again. That time grows with every failed
   attempt, according to a formula that does exist, is real, and that
@@ -142,8 +143,8 @@ might, to your eyes, appear "frozen":
 
 - It's waiting for you to press `[ENTER]`, as it asked you to, in gray,
   a while ago now.
-- It's in the middle of one of the `wait...` moments mentioned in the
-  previous section, and simply hasn't finished yet.
+- It's in the middle of one of the `compiling...` moments mentioned in
+  the previous section, and simply hasn't finished yet.
 - You're in cooldown, and that yellow message earlier wasn't a
   suggestion.
 - Torturette, generally speaking, tends to feel this way. Nothing is
@@ -196,7 +197,7 @@ linguistic coincidence.
 **What if I get stuck on an exercise?**
 That is, in fact, the entire point of an exam.
 
-**Can I use `grademe` over and over without stopping?**
+**Can I use `evaluate` over and over without stopping?**
 Technically, yes. Philosophically, the program would prefer you
 reflect a little between attempts. It has its ways of insisting on
 that.

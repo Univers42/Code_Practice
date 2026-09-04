@@ -16,7 +16,7 @@ class ExamConfig:
     rank: int
     exercise_names: list[str]
     levels: int
-    subjects_dir: str
+    statements_dir: str
     current_exercise: str = ""
     retrys: int = 0
     level: int = 0
@@ -43,27 +43,27 @@ class ExamConfig:
 
 
 _RANK_DATA = {
-    2: (EXERCISES_02, 4, ".src/.subjects/rank02"),
-    3: (EXERCISES_3, 6, ".src/.subjects/rank03"),
-    4: (EXERCISES_4, 4, ".src/.subjects/rank04"),
+    2: (EXERCISES_02, 4, ".src/.statements/rank02"),
+    3: (EXERCISES_3, 6, ".src/.statements/rank03"),
+    4: (EXERCISES_4, 4, ".src/.statements/rank04"),
 }
 
 
 def get_exam_config(rank: int) -> ExamConfig:
-    exercise_names, levels, subjects_dir = _RANK_DATA[rank]
+    exercise_names, levels, statements_dir = _RANK_DATA[rank]
     exercise_kinds = (
         {name: ex.kind for name, ex in EXERCISES_02_BY_NAME.items()}
         if rank == 2
         else {}
     )
     return ExamConfig(
-        rank, exercise_names, levels, subjects_dir,
+        rank, exercise_names, levels, statements_dir,
         exercise_kinds=exercise_kinds,
     )
 
 
 def _exists(path: Path) -> bool:
-    """solutions/testers/subjects live encrypted at rest (path.enc); a
+    """solutions/testers/statements live encrypted at rest (path.enc); a
     plain path is also accepted for anything not (yet) migrated."""
     return path.is_file() or path.with_name(path.name + ".enc").is_file()
 
@@ -87,7 +87,7 @@ def _check_rank02_layout(name: str) -> list[str]:
 
 def validate_rank_data() -> list[str]:
     problems: list[str] = []
-    for rank, (exercise_names, levels, subjects_dir) in _RANK_DATA.items():
+    for rank, (exercise_names, levels, statements_dir) in _RANK_DATA.items():
         if levels > len(exercise_names):
             problems.append(
                 f"rank{rank:02d}: levels ({levels}) exceeds the number of "
@@ -96,9 +96,9 @@ def validate_rank_data() -> list[str]:
         rank_dir = f"rank{rank:02d}"
         extension = "c" if rank == 2 else "py"
         for name in exercise_names:
-            subject_dir = REPO_ROOT / subjects_dir / name
-            if not subject_dir.is_dir():
-                problems.append(f"rank{rank:02d}/{name}: missing subject dir")
+            statement_dir = REPO_ROOT / statements_dir / name
+            if not statement_dir.is_dir():
+                problems.append(f"rank{rank:02d}/{name}: missing statement dir")
             if rank == 2:
                 problems.extend(_check_rank02_layout(name))
                 continue

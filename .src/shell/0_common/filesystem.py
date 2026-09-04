@@ -13,19 +13,19 @@ def recreate_dir(path: str) -> None:
 
 
 def prepare_exam_directories() -> None:
-    recreate_dir("rendu")
-    recreate_dir("subject")
+    recreate_dir("projects")
+    recreate_dir("statement")
 
 
-def ensure_rendu_dir() -> None:
-    Path("rendu").mkdir(exist_ok=True)
+def ensure_projects_dir() -> None:
+    Path("projects").mkdir(exist_ok=True)
 
 
-def copy_subject(config: ExamConfig, exercise: int) -> None:
+def copy_statement(config: ExamConfig, exercise: int) -> None:
     name = config.exercise_names[exercise]
     config.current_exercise = name
-    source = Path(config.subjects_dir) / name
-    destination = Path("subject") / name
+    source = Path(config.statements_dir) / name
+    destination = Path("statement") / name
     if destination.exists():
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
@@ -35,13 +35,13 @@ def copy_subject(config: ExamConfig, exercise: int) -> None:
             (destination / plain_name).write_bytes(decrypt_bytes(item.read_bytes()))
         else:
             shutil.copy(item, destination / item.name)
-    ensure_rendu_dir()
+    ensure_projects_dir()
 
 
-def cleanup_subject_dir() -> None:
-    subject_dir = Path("subject")
-    if subject_dir.exists():
-        shutil.rmtree(subject_dir)
+def cleanup_statement_dir() -> None:
+    statement_dir = Path("statement")
+    if statement_dir.exists():
+        shutil.rmtree(statement_dir)
 
 
 def cleanup_traces_dir() -> None:

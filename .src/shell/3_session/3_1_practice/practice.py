@@ -3,8 +3,8 @@ from pathlib import Path
 
 from constants import PROMPT, colored
 from exam_config import ExamConfig
-from filesystem import copy_subject
-from shared import subject_files_message
+from filesystem import copy_statement
+from shared import statement_files_message
 from signals import safe_input, wait_for_enter
 from terminal import clear_screen, write_line
 from testing import choice_test
@@ -13,13 +13,13 @@ from testing import choice_test
 def print_practice_commands() -> None:
     write_line("Available commands:")
     write_line(
-        f"{colored('grademe', 'green')}: to evaluate your current exercise."
+        f"{colored('evaluate', 'green')}: to evaluate your current exercise."
     )
     write_line(
-        f"{colored('status', 'green')}: to show your current status."
+        f"{colored('show', 'green')}: to show your current status."
     )
     write_line(
-        f"{colored('subject', 'green')}: to print the exercise subject."
+        f"{colored('statement', 'green')}: to print the exercise statement."
     )
     write_line(
         f"{colored('next', 'green')}: to move to the next exercise."
@@ -27,33 +27,33 @@ def print_practice_commands() -> None:
     write_line(
         f"{colored('clear', 'green')}: clear the samushell terminal."
     )
-    write_line(f"{colored('finish', 'green')}: to finish your exam.")
+    write_line(f"{colored('exit', 'green')}: to finish your exam.")
 
 
 def print_practice_status(name: str) -> None:
     print(f"Actual exercise: {colored(name, 'green')}")
-    print(subject_files_message(name))
+    print(statement_files_message(name))
     print_practice_commands()
 
 
-def print_subject(name: str) -> None:
-    subject_path = Path("subject") / name / "subject.en.txt"
+def print_statement(name: str) -> None:
+    statement_path = Path("statement") / name / "statement.en.txt"
     try:
-        print(subject_path.read_text())
+        print(statement_path.read_text())
     except OSError as error:
-        print(f"ERROR: could not read the subject file: {error}")
+        print(f"ERROR: could not read the statement file: {error}")
 
 
 def practice_exercise(config: ExamConfig, exercise: int) -> None:
     while True:
-        copy_subject(config, exercise)
+        copy_statement(config, exercise)
         clear_screen()
         name = config.exercise_names[exercise]
         print_practice_status(name)
         command = safe_input(PROMPT)
         next_exercise = -1
-        while command != "finish" and next_exercise == -1:
-            if command == "grademe":
+        while command != "exit" and next_exercise == -1:
+            if command == "evaluate":
                 result = choice_test(config)
                 if result[-1]:
                     print(
@@ -76,10 +76,10 @@ def practice_exercise(config: ExamConfig, exercise: int) -> None:
                     config.retrys += 1
                     command = safe_input(PROMPT)
                     continue
-            elif command == "status":
+            elif command == "show":
                 print_practice_status(name)
-            elif command == "subject":
-                print_subject(name)
+            elif command == "statement":
+                print_statement(name)
             elif command == "next":
                 pool_size = len(config.exercise_names)
                 next_exercise = exercise
@@ -90,11 +90,11 @@ def practice_exercise(config: ExamConfig, exercise: int) -> None:
                 clear_screen()
             else:
                 print(
-                    "Unrecognized command. Type 'status' for more"
+                    "Unrecognized command. Type 'show' for more"
                     " information."
                 )
 
             command = safe_input(PROMPT)
-        if command == "finish":
+        if command == "exit":
             return
         exercise = next_exercise

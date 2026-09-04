@@ -16,9 +16,9 @@ from terminal import clear_screen, write_line
 
 def show_coming_soon(rank: int) -> None:
     clear_screen()
-    write_line(colored(f"Rank {rank:02d}", "green"))
+    write_line(colored(f"Level {rank}", "green"))
     write_line(separator_line())
-    write_line("This rank isn't available yet. Check back soon!")
+    write_line("This level isn't available yet. Check back soon!")
     write_line(separator_line())
     write_line(colored("Press [ENTER] to go back:\n", "gray"), end="")
     wait_for_enter()
@@ -27,7 +27,7 @@ def show_coming_soon(rank: int) -> None:
 def show_all_exercises(config: ExamConfig) -> None:
     while True:
         clear_screen()
-        header = f"All exercises (Rank {config.rank:02d}):"
+        header = f"All exercises (Level {config.rank}):"
         write_line(colored(header, "green"))
         write_line(separator_line())
         number = 1
@@ -54,7 +54,7 @@ def show_all_exercises(config: ExamConfig) -> None:
 def show_exam_menu(config: ExamConfig) -> None:
     while True:
         clear_screen()
-        write_line(colored(f"Rank {config.rank:02d}", "green"))
+        write_line(colored(f"Level {config.rank}", "green"))
         write_line(separator_line())
         write_line(bracket_option("1", "Start exam"))
         write_line(bracket_option("2", "Show all exercises"))
@@ -79,9 +79,9 @@ def show_main_menu() -> None:
         clear_screen()
         write_line(colored("Welcome to samushell", "green"), 2)
         write_line(separator_line())
-        write_line(bracket_option("2", "Rank 02"))
-        write_line(bracket_option("3", "Rank 03"))
-        write_line(bracket_option("4", "Rank 04"))
+        write_line(bracket_option("2", "Level 2"))
+        write_line(bracket_option("3", "Level 3"))
+        write_line(bracket_option("4", "Level 4"))
         write_line(separator_line())
         write_line(bracket_option("q", "Exit"))
         write_line(separator_line())

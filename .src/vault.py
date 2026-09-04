@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Dev tool: lock/unlock subjects, solutions and testers at rest, for every
+Dev tool: lock/unlock statements, solutions and testers at rest, for every
 rank (02, 03, 04).
 
-Nothing under .src/.subjects/rank*, .src/rank*/solutions or .src/rank*/testers
+Nothing under .src/.statements/rank*, .src/rank*/solutions or .src/rank*/testers
 should ever sit in plain text in the tracked tree — not even for editing.
 `unlock` writes to .vault_scratch/ (gitignored, outside the tracked trees),
 never back over the encrypted original.
@@ -33,7 +33,7 @@ for _rank in (2, 3, 4):
     _sol_exts = {".c", ".h"} if _rank == 2 else {".py"}
     TARGETS.append((_rank_dir / "solutions", _sol_exts))
     TARGETS.append((_rank_dir / "testers", {".py"}))
-    TARGETS.append((SRC / ".subjects" / f"rank{_rank:02d}", {".txt"}))
+    TARGETS.append((SRC / ".statements" / f"rank{_rank:02d}", {".txt"}))
 
 
 def iter_plaintext_targets():

@@ -51,11 +51,19 @@ def compile_binary(
 
 
 def compile_object(work_dir: Path, source: str) -> tuple[CompileResult, Path]:
-    """Compile one source to a .o, no sanitizer instrumentation and no
-    stack-protector symbol, so nm sees only what the source itself calls.
-    Used for the allowed-functions check, not for grading execution."""
+    """Compile one source to a .o for the allowed-functions check, not for
+    grading execution:
+    - no sanitizer instrumentation (would add __asan_*/__ubsan_* noise)
+    - no stack-protector symbol (__stack_chk_fail on any local array)
+    - no builtin substitution: gcc rewrites plain printf("literal") into
+      puts()/putchar() on its own, which would flag "putchar" for a
+      student who only ever wrote (allowed) printf
+    """
     obj_name = Path(source).stem + ".o"
     result = compile_binary(
-        work_dir, [source], obj_name, extra_flags=["-c", "-fno-stack-protector"]
+        work_dir,
+        [source],
+        obj_name,
+        extra_flags=["-c", "-fno-stack-protector", "-fno-builtin"],
     )
     return result, work_dir / obj_name

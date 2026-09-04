@@ -5,7 +5,6 @@
 */
 
 #include <unistd.h>
-#include <stdlib.h>
 
 static void	print_int(int n)
 {
@@ -17,6 +16,18 @@ static void	print_int(int n)
 	write(1, &c, 1);
 }
 
+static int	parse_int(char *s)
+{
+	int	n;
+	int	i;
+
+	n = 0;
+	i = 0;
+	while (s[i] >= '0' && s[i] <= '9')
+		n = n * 10 + (s[i++] - '0');
+	return (n);
+}
+
 int	main(int argc, char **argv)
 {
 	int	n;
@@ -24,7 +35,7 @@ int	main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		n = atoi(argv[1]);
+		n = parse_int(argv[1]);
 		i = 1;
 		while (i <= 9)
 		{

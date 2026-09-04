@@ -7,6 +7,7 @@ from typing import Any
 
 from c_build import SANITIZE_FLAGS, compile_binary, compile_object
 from c_exec import run_binary
+from c_malloc_probe import MALLOC_CHECKS, build_probe, check_allocations, run_with_probe
 from c_report import describe_case, diff_text, same
 from c_restrictions import forbidden_functions_used, parse_allowed_functions
 from exam_config import ExamConfig
@@ -156,6 +157,46 @@ def _check_allowed_functions(
     return None
 
 
+def _check_malloc_sizes(
+    config: ExamConfig, ref_dir: Path, stu_dir: Path, stu_srcs: list[str]
+) -> list[Any] | None:
+    """Disproportionate mallocs (malloc(1000000) for a 3-byte word, or
+    malloc(strlen(whole_input)) reused for every item regardless of its
+    own size) produce correct output, so the normal comparison can't see
+    them. Rebuild WITHOUT sanitizers (-fsanitize=address installs its own
+    allocator and conflicts with an LD_PRELOAD hook) and run under a
+    malloc-logging shim on a handful of dedicated argv cases chosen to
+    expose a uniform/oversized allocation strategy.
+
+    The reference (ref_dir/bin, already an unsanitized build) shares the
+    exact same driver as the student, so it's run under the same probe to
+    learn which allocation sizes are just driver/libc noise (e.g. glibc's
+    first buffered stdio write) and not something the student's code did.
+    """
+    exercise = config.current_exercise
+    if exercise not in MALLOC_CHECKS:
+        return None
+    _, probe_cases = MALLOC_CHECKS[exercise]
+    plain_build = compile_binary(stu_dir, stu_srcs, "bin_plain")
+    if not plain_build.ok:
+        return None  # already compiled with more flags moments ago; be lenient
+    probe_so = build_probe(stu_dir)
+    if probe_so is None:
+        return None  # probe infra unavailable: don't block grading over it
+    log_path = stu_dir / "malloc_probe.log"
+    for argv in probe_cases:
+        baseline = run_with_probe(ref_dir / "bin", argv, b"", probe_so, log_path)
+        sizes = run_with_probe(stu_dir / "bin_plain", argv, b"", probe_so, log_path)
+        problem = check_allocations(exercise, argv, sizes, baseline)
+        if problem:
+            return _fail(
+                config,
+                f"ERROR: disproportionate allocation for {exercise}"
+                f" ({describe_case(argv, b'')}): {problem}",
+            )
+    return None
+
+
 def tester_c(config: ExamConfig) -> list[Any]:
     exercise = config.current_exercise
     try:
@@ -190,6 +231,10 @@ def tester_c(config: ExamConfig) -> list[Any]:
         violation = _check_allowed_functions(config, stu_dir, stu_own_srcs)
         if violation is not None:
             return violation
+
+        malloc_violation = _check_malloc_sizes(config, ref_dir, stu_dir, stu_srcs)
+        if malloc_violation is not None:
+            return malloc_violation
 
         report: list[Any] = []
         for n, (argv, stdin) in enumerate(cases, 1):

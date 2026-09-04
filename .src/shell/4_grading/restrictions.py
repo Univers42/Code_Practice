@@ -5,7 +5,10 @@ FORBIDDEN_LINE_PREFIX = "Forbidden functions:"
 
 
 def parse_forbidden_functions(subject_path: Path) -> list[str]:
-    text = subject_path.read_text()
+    return parse_forbidden_functions_text(subject_path.read_text())
+
+
+def parse_forbidden_functions_text(text: str) -> list[str]:
     for line in text.splitlines():
         if not line.startswith(FORBIDDEN_LINE_PREFIX):
             continue

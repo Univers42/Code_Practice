@@ -43,9 +43,9 @@ class ExamConfig:
 
 
 _RANK_DATA = {
-    2: (EXERCISES_02, 4, ".subjects/rank02"),
-    3: (EXERCISES_3, 6, ".subjects/rank03"),
-    4: (EXERCISES_4, 4, ".subjects/rank04"),
+    2: (EXERCISES_02, 4, ".src/.subjects/rank02"),
+    3: (EXERCISES_3, 6, ".src/.subjects/rank03"),
+    4: (EXERCISES_4, 4, ".src/.subjects/rank04"),
 }
 
 
@@ -62,19 +62,25 @@ def get_exam_config(rank: int) -> ExamConfig:
     )
 
 
+def _exists(path: Path) -> bool:
+    """solutions/testers/subjects live encrypted at rest (path.enc); a
+    plain path is also accepted for anything not (yet) migrated."""
+    return path.is_file() or path.with_name(path.name + ".enc").is_file()
+
+
 def _check_rank02_layout(name: str) -> list[str]:
     """rank02 turns in C: solutions/<ex>/<ex>.c (+ main.c for FUNCTION) and
     testers/<ex>/<ex>_test.py with the argv cases."""
     problems: list[str] = []
     src = REPO_ROOT / ".src" / "rank02"
     sol_dir = src / "solutions" / name
-    if not (sol_dir / f"{name}.c").is_file():
+    if not _exists(sol_dir / f"{name}.c"):
         problems.append(f"rank02/{name}: missing solutions/{name}/{name}.c")
     exercise = EXERCISES_02_BY_NAME.get(name)
     if exercise is not None and exercise.kind == "function":
-        if not (sol_dir / "main.c").is_file():
+        if not _exists(sol_dir / "main.c"):
             problems.append(f"rank02/{name}: missing solutions/{name}/main.c")
-    if not (src / "testers" / name / f"{name}_test.py").is_file():
+    if not _exists(src / "testers" / name / f"{name}_test.py"):
         problems.append(f"rank02/{name}: missing testers/{name}/{name}_test.py")
     return problems
 
@@ -104,10 +110,10 @@ def validate_rank_data() -> list[str]:
                 REPO_ROOT / ".src" / rank_dir / "testers" / name
                 / f"{name}_test.{extension}"
             )
-            if not solution_file.is_file():
+            if not _exists(solution_file):
                 problems.append(
                     f"rank{rank:02d}/{name}: missing solution file"
                 )
-            if not tester_file.is_file():
+            if not _exists(tester_file):
                 problems.append(f"rank{rank:02d}/{name}: missing tester file")
     return problems

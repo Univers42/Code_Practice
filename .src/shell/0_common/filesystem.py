@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 
+from c_vault import decrypt_bytes
 from exam_config import ExamConfig
 
 
@@ -23,10 +24,17 @@ def ensure_rendu_dir() -> None:
 def copy_subject(config: ExamConfig, exercise: int) -> None:
     name = config.exercise_names[exercise]
     config.current_exercise = name
+    source = Path(config.subjects_dir) / name
     destination = Path("subject") / name
     if destination.exists():
         shutil.rmtree(destination)
-    shutil.copytree(f"{config.subjects_dir}/{name}", destination)
+    destination.mkdir(parents=True)
+    for item in source.iterdir():
+        if item.suffix == ".enc":
+            plain_name = item.name.removesuffix(".enc")
+            (destination / plain_name).write_bytes(decrypt_bytes(item.read_bytes()))
+        else:
+            shutil.copy(item, destination / item.name)
     ensure_rendu_dir()
 
 

@@ -13,10 +13,13 @@ _COMPILER_INJECTED = {
 
 
 def parse_allowed_functions(subject_path: Path) -> set[str]:
+    return parse_allowed_functions_text(subject_path.read_text())
+
+
+def parse_allowed_functions_text(text: str) -> set[str]:
     """rank02 subjects list a whitelist ("Allowed functions: write, malloc"),
     the opposite of rank03/04's blacklist. Empty / "None" / "-" means the
     exercise may not call anything external at all."""
-    text = subject_path.read_text()
     for line in text.splitlines():
         if not line.startswith(ALLOWED_LINE_PREFIX):
             continue

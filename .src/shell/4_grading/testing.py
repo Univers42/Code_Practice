@@ -12,9 +12,10 @@ from c_build import SANITIZE_FLAGS, compile_binary, compile_object
 from c_exec import run_binary
 from c_malloc_probe import MALLOC_CHECKS, build_probe, check_allocations, run_with_probe
 from c_report import describe_case, diff_text, same
-from c_restrictions import forbidden_functions_used, parse_allowed_functions
+from c_restrictions import forbidden_functions_used, parse_allowed_functions_text
+from c_vault import VaultError, decrypt_bytes, read_maybe_encrypted
 from exam_config import ExamConfig
-from restrictions import parse_forbidden_functions, used_forbidden_functions
+from restrictions import parse_forbidden_functions_text, used_forbidden_functions
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RANK02_SRC = REPO_ROOT / ".src" / "rank02"
@@ -26,6 +27,14 @@ def _load_module(name: str, path: Path) -> ModuleType:
         raise ImportError(f"Cannot build an import spec for {path}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    return module
+
+
+def _load_module_from_source(name: str, source: str) -> ModuleType:
+    """Same as _load_module, but for source text that was just decrypted in
+    memory — it never gets written to disk anywhere, not even ephemerally."""
+    module = ModuleType(name)
+    exec(compile(source, f"<{name}>", "exec"), module.__dict__)
     return module
 
 
@@ -58,7 +67,8 @@ def _load_c_cases(exercise: str) -> list[tuple[list[str], bytes]]:
     memorized/hardcoded lookup-table answers regardless of how visible the
     test files themselves are."""
     tester_path = RANK02_SRC / "testers" / exercise / f"{exercise}_test.py"
-    module = _load_module(f"{exercise}_c_test", tester_path)
+    source = read_maybe_encrypted(tester_path).decode()
+    module = _load_module_from_source(f"{exercise}_c_test", source)
     raw_cases = list(getattr(module, "TEST_CASES", []))
     random_fn = getattr(module, "random_cases", None)
     if random_fn is not None:
@@ -77,19 +87,34 @@ def _load_c_cases(exercise: str) -> list[tuple[list[str], bytes]]:
     return cases
 
 
-def _copy_c_files(src_dir: Path, dest: Path, skip: set[str] = frozenset()) -> list[str]:
+def _copy_c_files(
+    src_dir: Path, dest: Path, skip: set[str] = frozenset(), decrypted: bool = False
+) -> list[str]:
+    """decrypted=True for solutions/ (encrypted at rest, e.g. ft_split.c.enc):
+    decrypt each into dest under its plain name. decrypted=False for rendu/
+    (the student's own plain files): copy as-is."""
     names: list[str] = []
-    for path in sorted(src_dir.glob("*.c")):
-        if path.name in skip:
+    pattern = "*.c.enc" if decrypted else "*.c"
+    for path in sorted(src_dir.glob(pattern)):
+        plain_name = path.name.removesuffix(".enc") if decrypted else path.name
+        if plain_name in skip:
             continue
-        shutil.copy(path, dest / path.name)
-        names.append(path.name)
+        if decrypted:
+            (dest / plain_name).write_bytes(decrypt_bytes(path.read_bytes()))
+        else:
+            shutil.copy(path, dest / plain_name)
+        names.append(plain_name)
     return names
 
 
-def _copy_headers(src_dir: Path, dest: Path) -> None:
-    for path in sorted(src_dir.glob("*.h")):
-        shutil.copy(path, dest / path.name)
+def _copy_headers(src_dir: Path, dest: Path, decrypted: bool = False) -> None:
+    pattern = "*.h.enc" if decrypted else "*.h"
+    for path in sorted(src_dir.glob(pattern)):
+        plain_name = path.name.removesuffix(".enc") if decrypted else path.name
+        if decrypted:
+            (dest / plain_name).write_bytes(decrypt_bytes(path.read_bytes()))
+        else:
+            shutil.copy(path, dest / plain_name)
 
 
 def _prepare_builds(
@@ -121,20 +146,27 @@ def _prepare_builds(
     ref.mkdir()
     stu.mkdir()
     for dest in (ref, stu):
+        # super.h is shared grading infra (prototypes only), not solution
+        # data, so it isn't in the vault
         shutil.copy(RANK02_SRC / "super.h", dest / "super.h")
-        _copy_headers(sol_dir, dest)  # canonical headers win over the student's
+        # canonical headers (list.h, ft_list.h...) win over the student's;
+        # they live in solutions/ and so ARE encrypted at rest
+        _copy_headers(sol_dir, dest, decrypted=True)
 
     if kind == "function":
-        driver = sol_dir / "main.c"
-        if not driver.is_file():
+        driver_enc = sol_dir / "main.c.enc"
+        if not driver_enc.is_file():
             return _fail(config, f"ERROR: missing driver main.c for {exercise}")
-        shutil.copy(driver, ref / "main.c")
-        shutil.copy(driver, stu / "main.c")
-        ref_srcs = ["main.c"] + _copy_c_files(sol_dir, ref, skip={"main.c"})
+        driver_src = decrypt_bytes(driver_enc.read_bytes())
+        (ref / "main.c").write_bytes(driver_src)
+        (stu / "main.c").write_bytes(driver_src)
+        ref_srcs = ["main.c"] + _copy_c_files(
+            sol_dir, ref, skip={"main.c"}, decrypted=True
+        )
         stu_own_srcs = _copy_c_files(rendu_dir, stu)
         stu_srcs = ["main.c"] + stu_own_srcs
     else:
-        ref_srcs = _copy_c_files(sol_dir, ref)
+        ref_srcs = _copy_c_files(sol_dir, ref, decrypted=True)
         stu_own_srcs = _copy_c_files(rendu_dir, stu)
         stu_srcs = stu_own_srcs
 
@@ -150,8 +182,8 @@ def _check_allowed_functions(
     exercise = config.current_exercise
     subject_path = REPO_ROOT / config.subjects_dir / exercise / "subject.en.txt"
     try:
-        allowed = parse_allowed_functions(subject_path)
-    except OSError:
+        allowed = parse_allowed_functions_text(read_maybe_encrypted(subject_path).decode())
+    except (OSError, VaultError):
         return None  # can't read the subject: don't block grading over it
 
     objects = []
@@ -217,7 +249,7 @@ def tester_c(config: ExamConfig) -> list[Any]:
     try:
         cases = _load_c_cases(exercise)
     except (OSError, ImportError, SyntaxError, AttributeError, ValueError,
-            TypeError, IndexError) as error:
+            TypeError, IndexError, VaultError) as error:
         return _fail(config, f"ERROR: exercise setup is broken: {error}")
     if not cases:
         return _fail(config, f"ERROR: no test cases defined for {exercise}")
@@ -295,11 +327,13 @@ def tester_python(config: ExamConfig) -> list[Any]:
     )
 
     try:
-        solution_module = _load_module(f"{exercise}_solution", solution_path)
+        solution_src = read_maybe_encrypted(solution_path).decode()
+        solution_module = _load_module_from_source(f"{exercise}_solution", solution_src)
         solution_fn = getattr(solution_module, f"{exercise}_solution")
-        tester_module = _load_module(f"{exercise}_test", tester_path)
+        tester_src = read_maybe_encrypted(tester_path).decode()
+        tester_module = _load_module_from_source(f"{exercise}_test", tester_src)
         test_cases = tester_module.TEST_CASES
-    except (OSError, ImportError, SyntaxError, AttributeError) as error:
+    except (OSError, ImportError, SyntaxError, AttributeError, VaultError) as error:
         return _fail(config, f"ERROR: exercise setup is broken: {error}")
 
     try:
@@ -313,9 +347,11 @@ def tester_python(config: ExamConfig) -> list[Any]:
         )
 
     try:
-        forbidden = parse_forbidden_functions(subject_path)
+        forbidden = parse_forbidden_functions_text(
+            read_maybe_encrypted(subject_path).decode()
+        )
         rendu_source = rendu_path.read_text()
-    except OSError:
+    except (OSError, VaultError):
         forbidden, rendu_source = [], ""
     used = used_forbidden_functions(rendu_source, forbidden)
     if used:

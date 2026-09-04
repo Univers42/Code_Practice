@@ -1,2 +1,3 @@
 .mypy_cache
 .src/__pycache__
+.vault_scratch

@@ -16,6 +16,10 @@ def prepare_exam_directories() -> None:
     recreate_dir("subject")
 
 
+def ensure_rendu_dir() -> None:
+    Path("rendu").mkdir(exist_ok=True)
+
+
 def copy_subject(config: ExamConfig, exercise: int) -> None:
     name = config.exercise_names[exercise]
     config.current_exercise = name
@@ -23,6 +27,7 @@ def copy_subject(config: ExamConfig, exercise: int) -> None:
     if destination.exists():
         shutil.rmtree(destination)
     shutil.copytree(f"{config.subjects_dir}/{name}", destination)
+    ensure_rendu_dir()
 
 
 def cleanup_subject_dir() -> None:

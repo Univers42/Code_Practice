@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 GREEN = "\033[32m"
 RED = "\033[31m"
 WHITE = "\033[37m"
@@ -37,81 +39,102 @@ def separator_line(width: int = 40) -> str:
     return colored("-" * width, "gray")
 
 
-EXERCISES_02_LEVELS: list[tuple[str, list[str]]] = [
+# --- Rank 02 exercise kinds ----------------------------------------------------
+# A rank 02 assignment is turned in as one or more .c files. How the shell
+# compiles and runs it depends on whether the student's file provides its own
+# entry point:
+#
+#   PROGRAM  -> the .c file has its own main(). Compile it on its own and run
+#               the resulting binary, feeding it argv / stdin and comparing its
+#               output against the reference.
+#   FUNCTION -> the .c file only defines a function (no main). Compile it
+#               together with a tester main provided by the shell, which calls
+#               the function and prints results to compare.
+PROGRAM = "program"
+FUNCTION = "function"
+
+
+@dataclass(frozen=True)
+class Exercise:
+    name: str
+    kind: str  # PROGRAM or FUNCTION
+
+
+EXERCISES_02_LEVELS: list[tuple[str, list[Exercise]]] = [
     (
         "Level 1",
         [
-            "first_word",
-            "fizzbuzz",
-            "ft_putstr",
-            "ft_strcpy",
-            "ft_strlen",
-            "ft_swap",
-            "repeat_alpha",
-            "rev_print",
-            "rot_13",
-            "rotone",
-            "search_and_replace",
-            "ulstr",
+            Exercise("first_word", PROGRAM),
+            Exercise("fizzbuzz", PROGRAM),
+            Exercise("ft_putstr", FUNCTION),
+            Exercise("ft_strcpy", FUNCTION),
+            Exercise("ft_strlen", FUNCTION),
+            Exercise("ft_swap", FUNCTION),
+            Exercise("repeat_alpha", PROGRAM),
+            Exercise("rev_print", PROGRAM),
+            Exercise("rot_13", PROGRAM),
+            Exercise("rotone", PROGRAM),
+            Exercise("search_and_replace", PROGRAM),
+            Exercise("ulstr", PROGRAM),
         ],
     ),
     (
         "Level 2",
         [
-            "alpha_mirror",
-            "camel_to_snake",
-            "do_op",
-            "ft_atoi",
-            "ft_strcmp",
-            "ft_strcspn",
-            "ft_strdup",
-            "ft_strpbrk",
-            "ft_strrev",
-            "ft_strspn",
-            "is_power_of_2",
-            "last_word",
-            "max",
-            "print_bits",
-            "reverse_bits",
-            "snake_to_camel",
-            "swap_bits",
-            "union",
-            "wdmatch",
+            Exercise("alpha_mirror", PROGRAM),
+            Exercise("camel_to_snake", PROGRAM),
+            Exercise("do_op", PROGRAM),
+            Exercise("ft_atoi", FUNCTION),
+            Exercise("ft_strcmp", FUNCTION),
+            Exercise("ft_strcspn", FUNCTION),
+            Exercise("ft_strdup", FUNCTION),
+            Exercise("ft_strpbrk", FUNCTION),
+            Exercise("ft_strrev", FUNCTION),
+            Exercise("ft_strspn", FUNCTION),
+            Exercise("is_power_of_2", FUNCTION),
+            Exercise("last_word", PROGRAM),
+            Exercise("max", FUNCTION),
+            Exercise("print_bits", FUNCTION),
+            Exercise("reverse_bits", FUNCTION),
+            Exercise("snake_to_camel", PROGRAM),
+            Exercise("swap_bits", FUNCTION),
+            Exercise("union", PROGRAM),
+            Exercise("wdmatch", PROGRAM),
         ],
     ),
     (
         "Level 3",
         [
-            "add_prime_sum",
-            "epur_str",
-            "expand_str",
-            "ft_atoi_base",
-            "ft_list_size",
-            "ft_range",
-            "ft_rrange",
-            "hidenp",
-            "lcm",
-            "paramsum",
-            "pgcd",
-            "print_hex",
-            "rstr_capitalizer",
-            "str_capitalizer",
-            "tab_mult",
+            Exercise("add_prime_sum", PROGRAM),
+            Exercise("epur_str", PROGRAM),
+            Exercise("expand_str", PROGRAM),
+            Exercise("ft_atoi_base", FUNCTION),
+            Exercise("ft_list_size", FUNCTION),
+            Exercise("ft_range", FUNCTION),
+            Exercise("ft_rrange", FUNCTION),
+            Exercise("hidenp", PROGRAM),
+            Exercise("lcm", FUNCTION),
+            Exercise("paramsum", PROGRAM),
+            Exercise("pgcd", PROGRAM),
+            Exercise("print_hex", PROGRAM),
+            Exercise("rstr_capitalizer", PROGRAM),
+            Exercise("str_capitalizer", PROGRAM),
+            Exercise("tab_mult", PROGRAM),
         ],
     ),
     (
         "Level 4",
         [
-            "flood_fill",
-            "fprime",
-            "ft_itoa",
-            "ft_list_foreach",
-            "ft_list_remove_if",
-            "ft_split",
-            "rev_wstr",
-            "rostring",
-            "sort_int_tab",
-            "sort_list",
+            Exercise("flood_fill", FUNCTION),
+            Exercise("fprime", PROGRAM),
+            Exercise("ft_itoa", FUNCTION),
+            Exercise("ft_list_foreach", FUNCTION),
+            Exercise("ft_list_remove_if", FUNCTION),
+            Exercise("ft_split", FUNCTION),
+            Exercise("rev_wstr", PROGRAM),
+            Exercise("rostring", PROGRAM),
+            Exercise("sort_int_tab", FUNCTION),
+            Exercise("sort_list", FUNCTION),
         ],
     ),
 ]
@@ -173,7 +196,14 @@ EXERCISES_4_LEVELS: list[tuple[str, list[str]]] = [
     ),
 ]
 
-EXERCISES_02 = [name for _, names in EXERCISES_02_LEVELS for name in names]
+EXERCISES_02_ALL: list[Exercise] = [
+    exercise for _, exercises in EXERCISES_02_LEVELS for exercise in exercises
+]
+EXERCISES_02: list[str] = [exercise.name for exercise in EXERCISES_02_ALL]
+EXERCISES_02_BY_NAME: dict[str, Exercise] = {
+    exercise.name: exercise for exercise in EXERCISES_02_ALL
+}
+
 EXERCISES_3 = [name for _, names in EXERCISES_3_LEVELS for name in names]
 EXERCISES_4 = [name for _, names in EXERCISES_4_LEVELS for name in names]
 

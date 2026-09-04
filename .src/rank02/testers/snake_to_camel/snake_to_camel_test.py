@@ -1,0 +1,11 @@
+from typing import Any
+
+# Each case: a list of argv (strings passed after the program name),
+# or {"argv": [...], "stdin": "..."}.
+TEST_CASES: list[Any] = [
+    ['here_is_a_snake_case_word'],
+    ['hello_world'],
+    [],
+    ['alreadylower'],
+    ['a_b_c'],
+]

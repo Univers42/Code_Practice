@@ -1,6 +1,7 @@
 from constants import (
     LEVELS_BY_RANK,
     PROMPT,
+    Exercise,
     bracket_option,
     colored,
     separator_line,
@@ -30,9 +31,10 @@ def show_all_exercises(config: ExamConfig) -> None:
         write_line(colored(header, "green"))
         write_line(separator_line())
         number = 1
-        for level_name, names in LEVELS_BY_RANK[config.rank]:
+        for level_name, entries in LEVELS_BY_RANK[config.rank]:
             write_line(underlined_header(level_name))
-            for name in names:
+            for entry in entries:
+                name = entry.name if isinstance(entry, Exercise) else entry
                 write_line(bracket_option(str(number), name))
                 number += 1
         write_line(separator_line())
@@ -85,7 +87,7 @@ def show_main_menu() -> None:
         write_line(separator_line())
         choice = safe_input(PROMPT, interrupt_message="")
         if choice == "2":
-            show_coming_soon(2)
+            show_exam_menu(get_exam_config(2))
         elif choice == "3":
             show_exam_menu(get_exam_config(3))
         elif choice == "4":

@@ -1,12 +1,19 @@
 import importlib.util
+import shutil
+import tempfile
 from pathlib import Path
 from types import ModuleType
 from typing import Any
 
+from c_build import SANITIZE_FLAGS, compile_binary, compile_object
+from c_exec import run_binary
+from c_report import describe_case, diff_text, same
+from c_restrictions import forbidden_functions_used, parse_allowed_functions
 from exam_config import ExamConfig
 from restrictions import parse_forbidden_functions, used_forbidden_functions
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+RANK02_SRC = REPO_ROOT / ".src" / "rank02"
 
 
 def _load_module(name: str, path: Path) -> ModuleType:
@@ -38,8 +45,175 @@ def choice_test(config: ExamConfig) -> list[Any]:
     return tester_python(config)
 
 
+def _load_c_cases(exercise: str) -> list[tuple[list[str], bytes]]:
+    tester_path = RANK02_SRC / "testers" / exercise / f"{exercise}_test.py"
+    module = _load_module(f"{exercise}_c_test", tester_path)
+    cases: list[tuple[list[str], bytes]] = []
+    for entry in module.TEST_CASES:
+        if isinstance(entry, dict):
+            argv = [str(a) for a in entry.get("argv", [])]
+            stdin = entry.get("stdin", "")
+        else:
+            argv = [str(a) for a in entry]
+            stdin = ""
+        raw = stdin.encode() if isinstance(stdin, str) else bytes(stdin)
+        cases.append((argv, raw))
+    return cases
+
+
+def _copy_c_files(src_dir: Path, dest: Path, skip: set[str] = frozenset()) -> list[str]:
+    names: list[str] = []
+    for path in sorted(src_dir.glob("*.c")):
+        if path.name in skip:
+            continue
+        shutil.copy(path, dest / path.name)
+        names.append(path.name)
+    return names
+
+
+def _copy_headers(src_dir: Path, dest: Path) -> None:
+    for path in sorted(src_dir.glob("*.h")):
+        shutil.copy(path, dest / path.name)
+
+
+def _prepare_builds(
+    config: ExamConfig, work: Path
+) -> tuple[Path, Path, list[str], list[str], list[str]] | list[Any]:
+    """Lay out ref/ and stu/ build dirs.
+
+    Returns (ref, stu, ref_srcs, stu_srcs, stu_own_srcs) where stu_own_srcs
+    is the subset of stu_srcs that is actually the student's code (excludes
+    our injected main.c for FUNCTION exercises) — that's what the
+    allowed-functions check must look at, not our own driver.
+    """
+    exercise = config.current_exercise
+    kind = config.kind_of(exercise)
+    sol_dir = RANK02_SRC / "solutions" / exercise
+    rendu_dir = REPO_ROOT / "rendu" / exercise
+
+    if not sol_dir.is_dir():
+        return _fail(config, f"ERROR: no reference for {exercise}")
+    if not list(rendu_dir.glob("*.c")):
+        return _fail(
+            config,
+            f"ERROR: nothing turned in "
+            f"(expected rendu/{exercise}/{exercise}.c)",
+        )
+
+    ref = work / "ref"
+    stu = work / "stu"
+    ref.mkdir()
+    stu.mkdir()
+    for dest in (ref, stu):
+        shutil.copy(RANK02_SRC / "super.h", dest / "super.h")
+        _copy_headers(sol_dir, dest)  # canonical headers win over the student's
+
+    if kind == "function":
+        driver = sol_dir / "main.c"
+        if not driver.is_file():
+            return _fail(config, f"ERROR: missing driver main.c for {exercise}")
+        shutil.copy(driver, ref / "main.c")
+        shutil.copy(driver, stu / "main.c")
+        ref_srcs = ["main.c"] + _copy_c_files(sol_dir, ref, skip={"main.c"})
+        stu_own_srcs = _copy_c_files(rendu_dir, stu)
+        stu_srcs = ["main.c"] + stu_own_srcs
+    else:
+        ref_srcs = _copy_c_files(sol_dir, ref)
+        stu_own_srcs = _copy_c_files(rendu_dir, stu)
+        stu_srcs = stu_own_srcs
+
+    return ref, stu, ref_srcs, stu_srcs, stu_own_srcs
+
+
+def _check_allowed_functions(
+    config: ExamConfig, stu_dir: Path, stu_own_srcs: list[str]
+) -> list[Any] | None:
+    """Only the student's own files, never the reference or our driver:
+    the alumno can use whatever they want internally, this only checks what
+    THEIR turn-in calls externally against the subject's whitelist."""
+    exercise = config.current_exercise
+    subject_path = REPO_ROOT / config.subjects_dir / exercise / "subject.en.txt"
+    try:
+        allowed = parse_allowed_functions(subject_path)
+    except OSError:
+        return None  # can't read the subject: don't block grading over it
+
+    objects = []
+    for src in stu_own_srcs:
+        obj_build, obj_path = compile_object(stu_dir, src)
+        if not obj_build.ok:
+            return _fail(
+                config, f"ERROR: your code does not compile:\n{obj_build.log}"
+            )
+        objects.append(obj_path)
+
+    violations = forbidden_functions_used(objects, allowed)
+    if violations:
+        return _fail(
+            config,
+            f"ERROR: forbidden function(s) used: {', '.join(violations)}",
+        )
+    return None
+
+
 def tester_c(config: ExamConfig) -> list[Any]:
-    return _fail(config, "ERROR: C testing is not implemented yet")
+    exercise = config.current_exercise
+    try:
+        cases = _load_c_cases(exercise)
+    except (OSError, ImportError, SyntaxError, AttributeError) as error:
+        return _fail(config, f"ERROR: exercise setup is broken: {error}")
+    if not cases:
+        return _fail(config, f"ERROR: no test cases defined for {exercise}")
+
+    with tempfile.TemporaryDirectory(prefix=f"{exercise}_") as tmp:
+        prepared = _prepare_builds(config, Path(tmp))
+        if isinstance(prepared, list):  # _fail(...) short-circuit
+            return prepared
+        ref_dir, stu_dir, ref_srcs, stu_srcs, stu_own_srcs = prepared
+
+        ref_build = compile_binary(ref_dir, ref_srcs, "bin")
+        if not ref_build.ok:
+            return _fail(
+                config,
+                f"ERROR: reference for {exercise} does not compile:\n"
+                f"{ref_build.log}",
+            )
+        stu_build = compile_binary(
+            stu_dir, stu_srcs, "bin", extra_flags=SANITIZE_FLAGS
+        )
+        if not stu_build.ok:
+            return _fail(
+                config,
+                f"ERROR: your code does not compile:\n{stu_build.log}",
+            )
+
+        violation = _check_allowed_functions(config, stu_dir, stu_own_srcs)
+        if violation is not None:
+            return violation
+
+        report: list[Any] = []
+        for n, (argv, stdin) in enumerate(cases, 1):
+            expected = run_binary(ref_dir / "bin", argv, stdin)
+            if expected.timed_out or expected.crashed:
+                return _fail(
+                    config,
+                    f"ERROR: reference misbehaved on test {n} "
+                    f"({describe_case(argv, stdin)})",
+                )
+            actual = run_binary(stu_dir / "bin", argv, stdin)
+            if same(expected, actual):
+                report.append(f"test {n} [OK]")
+                continue
+            report.append(
+                f"test {n} [KO]\nInput: {describe_case(argv, stdin)}\n"
+                f"{diff_text(expected, actual)}"
+            )
+            _write_trace(config, "\n".join(report))
+            report.append(False)
+            return report
+
+    report.append(True)
+    return report
 
 
 def tester_python(config: ExamConfig) -> list[Any]:

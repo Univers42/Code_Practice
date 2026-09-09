@@ -6,6 +6,7 @@ from constants import (
     EXERCISES_02_BY_NAME,
     EXERCISES_3,
     EXERCISES_4,
+    EXERCISES_5,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -46,6 +47,7 @@ _RANK_DATA = {
     2: (EXERCISES_02, 4, ".src/.statements/rank02"),
     3: (EXERCISES_3, 6, ".src/.statements/rank03"),
     4: (EXERCISES_4, 4, ".src/.statements/rank04"),
+    5: (EXERCISES_5, 4, ".src/.statements/rank05"),
 }
 
 

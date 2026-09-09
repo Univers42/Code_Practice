@@ -28,7 +28,7 @@ SCRATCH = REPO_ROOT / ".vault_scratch"
 
 # (directory, extensions) in scope for lock-all / verify-all, across every rank
 TARGETS = []
-for _rank in (2, 3, 4):
+for _rank in (2, 3, 4, 5):
     _rank_dir = SRC / f"rank{_rank:02d}"
     _sol_exts = {".c", ".h"} if _rank == 2 else {".py"}
     TARGETS.append((_rank_dir / "solutions", _sol_exts))

@@ -82,6 +82,7 @@ def show_main_menu() -> None:
         write_line(bracket_option("2", "Level 2"))
         write_line(bracket_option("3", "Level 3"))
         write_line(bracket_option("4", "Level 4"))
+        write_line(bracket_option("5", "Level 5"))
         write_line(separator_line())
         write_line(bracket_option("q", "Exit"))
         write_line(separator_line())
@@ -92,6 +93,8 @@ def show_main_menu() -> None:
             show_exam_menu(get_exam_config(3))
         elif choice == "4":
             show_exam_menu(get_exam_config(4))
+        elif choice == "5":
+            show_exam_menu(get_exam_config(5))
         elif choice == "q":
             clear_screen()
             exit(0)

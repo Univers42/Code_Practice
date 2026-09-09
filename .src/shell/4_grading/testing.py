@@ -328,17 +328,26 @@ def tester_python(config: ExamConfig) -> list[Any]:
 
     try:
         solution_src = read_maybe_encrypted(solution_path).decode()
-        solution_module = _load_module_from_source(f"{exercise}_solution", solution_src)
-        solution_fn = getattr(solution_module, f"{exercise}_solution")
+        solution_module = _load_module_from_source(
+            f"{exercise}_solution", solution_src
+        )
         tester_src = read_maybe_encrypted(tester_path).decode()
         tester_module = _load_module_from_source(f"{exercise}_test", tester_src)
-        test_cases = tester_module.TEST_CASES
+        test_cases = list(tester_module.TEST_CASES)
+        # A tester may set MULTI_FN = True and give cases as (fn_name, [args])
+        # to exercise several functions from a single turn-in file (e.g. a
+        # pack/unpack pair). Otherwise: one function, cases are plain arg lists.
+        multi_fn = bool(getattr(tester_module, "MULTI_FN", False))
+        solution_fn = (
+            None if multi_fn
+            else getattr(solution_module, f"{exercise}_solution")
+        )
     except (OSError, ImportError, SyntaxError, AttributeError, VaultError) as error:
         return _fail(config, f"ERROR: exercise setup is broken: {error}")
 
     try:
         project_module = _load_module(exercise, project_path)
-        project_fn = getattr(project_module, exercise)
+        project_fn = None if multi_fn else getattr(project_module, exercise)
     except (OSError, ImportError, SyntaxError) as error:
         return _fail(config, f"ERROR: {error}")
     except AttributeError:
@@ -362,8 +371,34 @@ def tester_python(config: ExamConfig) -> list[Any]:
     report: list[Any] = []
     passed = True
     for n, test in enumerate(test_cases, 1):
+        if multi_fn:
+            fn_name, args = test[0], list(test[1])
+            try:
+                sol_call = getattr(solution_module, fn_name)
+            except AttributeError:
+                return _fail(
+                    config,
+                    f"ERROR: exercise setup is broken: reference has no "
+                    f"function '{fn_name}'",
+                )
+            try:
+                stu_call = getattr(project_module, fn_name)
+            except AttributeError:
+                report.append(
+                    f"test {n} [KO]\nInput: {fn_name}(*{args})\n"
+                    f"Error: no function named '{fn_name}' in your file"
+                )
+                passed = False
+                _write_trace(config, "\n".join(report))
+                report.append(passed)
+                return report
+        else:
+            args = test
+            sol_call = solution_fn
+            stu_call = project_fn
+
         try:
-            my_result = solution_fn(*test)
+            my_result = sol_call(*args)
         except Exception as error:
             return _fail(
                 config,
@@ -371,7 +406,7 @@ def tester_python(config: ExamConfig) -> list[Any]:
                 f"(input: {test}): {error}",
             )
         try:
-            your_result = project_fn(*test)
+            your_result = stu_call(*args)
         except Exception as e:
             report.append(f"test {n} [KO]\nInput: {test}\nError: {e}")
             passed = False

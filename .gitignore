@@ -1,3 +1,11 @@
 .mypy_cache
-.src/__pycache__
+__pycache__/
+*.pyc
 .vault_scratch
+projects/
+statement/
+traces/
+
+# plaintext source of the rank5 statements — kept locally, never pushed
+# (the real statements live encrypted under .src/.statements/rank05)
+rank5.md

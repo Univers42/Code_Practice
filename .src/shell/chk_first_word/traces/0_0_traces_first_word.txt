@@ -1,7 +1,0 @@
-test 1 [KO]
-Input: "FOR PONY"
---- expected ---
-FOR PONY$
-
---- your output ---
-FOR$

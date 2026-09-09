@@ -196,6 +196,31 @@ EXERCISES_4_LEVELS: list[tuple[str, list[str]]] = [
     ),
 ]
 
+EXERCISES_5_LEVELS: list[tuple[str, list[str]]] = [
+    (
+        "Level 1",
+        [
+            "crate_grid",
+            "coil_garden",
+            "chore_chart_loop",
+        ],
+    ),
+    (
+        "Level 2",
+        [
+            "crate_ledger",
+            "barn_roster",
+        ],
+    ),
+    (
+        "Level 3",
+        [
+            "quilt_search",
+            "repaint_signpost",
+        ],
+    ),
+]
+
 EXERCISES_02_ALL: list[Exercise] = [
     exercise for _, exercises in EXERCISES_02_LEVELS for exercise in exercises
 ]
@@ -206,9 +231,11 @@ EXERCISES_02_BY_NAME: dict[str, Exercise] = {
 
 EXERCISES_3 = [name for _, names in EXERCISES_3_LEVELS for name in names]
 EXERCISES_4 = [name for _, names in EXERCISES_4_LEVELS for name in names]
+EXERCISES_5 = [name for _, names in EXERCISES_5_LEVELS for name in names]
 
 LEVELS_BY_RANK = {
     2: EXERCISES_02_LEVELS,
     3: EXERCISES_3_LEVELS,
     4: EXERCISES_4_LEVELS,
+    5: EXERCISES_5_LEVELS,
 }

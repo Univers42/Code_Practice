@@ -5,7 +5,7 @@ from clock import format_remaining_time, get_remaining_time, start_exam_clock
 from constants import PROMPT, colored
 from cooldown import format_cooldown, get_remaining_cooldown
 from exam_config import ExamConfig
-from exercises import pick_random_exercise
+from exercises import pick_exam_exercise
 from filesystem import copy_statement, prepare_exam_directories
 from shared import statement_files_message
 from signals import safe_input, wait_for_enter
@@ -105,7 +105,7 @@ def start_exam(config: ExamConfig) -> None:
     exam_deadline = start_exam_clock(hours=3)
     level = 0
     score = 0
-    exercise = pick_random_exercise(exercises)
+    exercise = pick_exam_exercise(config.rank, level, exercises)
     copy_statement(config, exercise)
     print_status(config, level, score, exercise, exam_deadline)
     command = safe_input(PROMPT)
@@ -153,7 +153,7 @@ def start_exam(config: ExamConfig) -> None:
                     score = config.score_after(level)
                     if level > config.last_level:
                         break
-                    exercise = pick_random_exercise(exercises)
+                    exercise = pick_exam_exercise(config.rank, level, exercises)
                     copy_statement(config, exercise)
                     print_status(config, level, score, exercise, exam_deadline)
                 else:

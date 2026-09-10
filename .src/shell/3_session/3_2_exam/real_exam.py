@@ -103,6 +103,7 @@ def start_exam(config: ExamConfig) -> None:
     wait_for_enter()
     prepare_exam_directories()
     exam_deadline = start_exam_clock(hours=3)
+    exam_start = time.time()
     level = 0
     score = 0
     exercise = pick_exam_exercise(config.rank, level, exercises)
@@ -187,3 +188,5 @@ def start_exam(config: ExamConfig) -> None:
         write_line(
                 colored("You reached max score!", "green"), 2
             )
+        elapsed = format_remaining_time(time.time() - exam_start)
+        write_line(colored(f"Exam completed in {elapsed}", "green"), 2)

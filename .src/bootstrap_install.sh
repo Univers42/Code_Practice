@@ -85,7 +85,7 @@ echo "Goodbye."
 UNINSTALL_EOF
 chmod +x "$REPO_ROOT/.uninstall"
 
-echo "open the docs"
+echo "open ./docs"
 
 rm -f "$REPO_ROOT/Makefile"
 rm -f "$REPO_ROOT/README.md"

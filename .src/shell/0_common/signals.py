@@ -34,7 +34,7 @@ def _count_eof(consecutive_eof: int, interrupt_message: str) -> int:
 
 
 def safe_input(
-    prompt: str = "", interrupt_message: str = "Use finish to end the exam."
+    prompt: str = "", interrupt_message: str = "Use exit to end the exam."
 ) -> str:
     consecutive_eof = 0
     while True:
